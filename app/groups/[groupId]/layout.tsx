@@ -1,13 +1,11 @@
 import Link from 'next/link';
+import { GroupTopBar } from '@/components/groups/GroupTopBar';
 
 export default function GroupLayout({ children, params }: { children: React.ReactNode; params: { groupId: string } }) {
 	const { groupId } = params;
 	return (
 		<div className="max-w-6xl mx-auto px-4 py-6">
-			<div className="flex items-center justify-between">
-				<h1 className="text-xl font-semibold">Group Workspace</h1>
-				<Link className="text-sm text-muted" href="/groups">Back to groups</Link>
-			</div>
+			<GroupTopBar groupId={groupId} />
 			<nav className="mt-4 border-b border-white/5 flex gap-4 text-sm">
 				<Link href={`/groups/${groupId}`} className="px-2 py-2 hover:opacity-80">Chat</Link>
 				<Link href={`/groups/${groupId}/board`} className="px-2 py-2 hover:opacity-80">Board</Link>

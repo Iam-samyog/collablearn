@@ -4,6 +4,8 @@ import { initFirebase } from '@/lib/firebase';
 import { addDoc, collection, doc, onSnapshot, serverTimestamp, setDoc } from 'firebase/firestore';
 import { useAuth } from '@/components/auth/AuthProvider';
 import { RequireAuth } from '@/components/auth/RequireAuth';
+import { Button } from '@/components/ui/Button';
+import { Card } from '@/components/ui/Card';
 
 type PeerConn = {
 	pc: RTCPeerConnection;
@@ -16,9 +18,12 @@ export default function VideoPage({ params }: { params: { groupId: string } }) {
 	const { user } = useAuth();
 	const [localStream, setLocalStream] = useState<MediaStream | null>(null);
 	const [peers, setPeers] = useState<Record<string, MediaStream>>({});
+	const [camOn, setCamOn] = useState(true);
+	const [micOn, setMicOn] = useState(true);
 	const conns = useRef<Map<string, PeerConn>>(new Map());
 	const unsubSignals = useRef<() => void>();
 	const unsubPeers = useRef<() => void>();
+	const screenTrackRef = useRef<MediaStreamTrack | null>(null);
 
 	useEffect(() => {
 		if (!user) return;
@@ -139,11 +144,57 @@ export default function VideoPage({ params }: { params: { groupId: string } }) {
 		return { pc, stream: remoteStream };
 	}
 
+	function toggleCamera() {
+		if (!localStream) return;
+		localStream.getVideoTracks().forEach((t) => (t.enabled = !t.enabled));
+		setCamOn((v) => !v);
+	}
+	function toggleMic() {
+		if (!localStream) return;
+		localStream.getAudioTracks().forEach((t) => (t.enabled = !t.enabled));
+		setMicOn((v) => !v);
+	}
+	async function startScreenShare() {
+		if (!user) return;
+		try {
+			// @ts-expect-error - getDisplayMedia types vary by browser
+			const display: MediaStream = await navigator.mediaDevices.getDisplayMedia({ video: true, audio: false });
+			const track: MediaStreamTrack | undefined = display.getVideoTracks()[0];
+			if (!track) return;
+			screenTrackRef.current = track;
+			conns.current.forEach(({ pc }) => {
+				const sender = pc.getSenders().find((s) => s.track && s.track.kind === 'video');
+				if (sender) sender.replaceTrack(track);
+			});
+			track.onended = () => stopScreenShare();
+		} catch {
+			// ignore
+		}
+	}
+	function stopScreenShare() {
+		if (!localStream) return;
+		const camTrack = localStream.getVideoTracks()[0];
+		conns.current.forEach(({ pc }) => {
+			const sender = pc.getSenders().find((s) => s.track && s.track.kind === 'video');
+			if (sender && camTrack) sender.replaceTrack(camTrack);
+		});
+		screenTrackRef.current?.stop();
+		screenTrackRef.current = null;
+	}
+
 	return (
 		<RequireAuth>
 		<div className="space-y-4">
-			<div className="grid md:grid-cols-3 gap-4">
-				<div className="card p-3">
+			<Card className="p-3 flex items-center gap-2">
+				<Button variant="outline" onClick={toggleCamera}>{camOn ? 'Camera off' : 'Camera on'}</Button>
+				<Button variant="outline" onClick={toggleMic}>{micOn ? 'Mute' : 'Unmute'}</Button>
+				<Button variant="outline" onClick={screenTrackRef.current ? stopScreenShare : startScreenShare}>
+					{screenTrackRef.current ? 'Stop sharing' : 'Share screen'}
+				</Button>
+				<div className="text-xs text-muted ml-auto">Up to ~10 users in a mesh</div>
+			</Card>
+			<div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+				<Card className="p-3">
 					<div className="text-sm text-muted mb-2">You</div>
 					<video
 						autoPlay
@@ -154,9 +205,9 @@ export default function VideoPage({ params }: { params: { groupId: string } }) {
 							if (el && localStream) el.srcObject = localStream;
 						}}
 					/>
-				</div>
+				</Card>
 				{Object.entries(peers).map(([peerId, stream]) => (
-					<div key={peerId} className="card p-3">
+					<Card key={peerId} className="p-3">
 						<div className="text-sm text-muted mb-2 truncate">{peerId}</div>
 						<video
 							autoPlay
@@ -166,10 +217,9 @@ export default function VideoPage({ params }: { params: { groupId: string } }) {
 								if (el) el.srcObject = stream;
 							}}
 						/>
-					</div>
+					</Card>
 				))}
 			</div>
-			<p className="text-xs text-muted">Tip: Allow camera/microphone when prompted. Up to ~10 users in a mesh.</p>
 		</div>
 		</RequireAuth>
 	);
