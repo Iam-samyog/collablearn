@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+	--radius: 10px;
+}
+
+html, body {
+	height: 100%;
+}
+
+body {
+	@apply bg-bg text-white antialiased;
+}
+
+.card {
+	@apply bg-surface/60 backdrop-blur-xl rounded-xl shadow-soft border border-white/5;
+}
+
+.focus-ring {
+	@apply focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-bg rounded-md;
+}
+
+a {
+	@apply text-accent hover:opacity-80 transition;
+}
+
+input, textarea, select, button {
+	@apply bg-surface/80 border border-white/10 rounded-md px-3 py-2 text-white placeholder-muted;
+}
+
+button.primary {
+	@apply bg-accent text-bg font-medium hover:bg-cyan-300 transition focus-ring;
+}
+
