@@ -1,22 +1,63 @@
+'use client';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { GroupTopBar } from '@/components/groups/GroupTopBar';
+import { UserMenu } from '@/components/layout/UserMenu';
 
 export default function GroupLayout({ children, params }: { children: React.ReactNode; params: { groupId: string } }) {
 	const { groupId } = params;
+	const pathname = usePathname();
+	
+	const links = [
+		{ name: 'Chat', href: `/groups/${groupId}` },
+		{ name: 'Board', href: `/groups/${groupId}/board` },
+		{ name: 'Video', href: `/groups/${groupId}/video` },
+		{ name: 'Quizzes', href: `/groups/${groupId}/quizzes` },
+		{ name: 'Music', href: `/groups/${groupId}/music` },
+	];
+
 	return (
-		<div className="max-w-6xl mx-auto px-4 py-6">
+		<div className="w-full px-4 py-4 md:px-6 flex flex-col flex-1 h-full">
 			<GroupTopBar groupId={groupId} />
-			<nav className="mt-4 border-b border-white/5 flex gap-4 text-sm">
-				<Link href={`/groups/${groupId}`} className="px-2 py-2 hover:opacity-80">Chat</Link>
-				<Link href={`/groups/${groupId}/board`} className="px-2 py-2 hover:opacity-80">Board</Link>
-				<Link href={`/groups/${groupId}/video`} className="px-2 py-2 hover:opacity-80">Video</Link>
-				<Link href={`/groups/${groupId}/quizzes`} className="px-2 py-2 hover:opacity-80">Quizzes</Link>
-				<Link href={`/groups/${groupId}/music`} className="px-2 py-2 hover:opacity-80">Music</Link>
-			</nav>
-			<div className="mt-6">
-				{children}
+			
+			<div className="mt-4 flex-1 flex flex-col md:flex-row gap-6 min-h-0">
+				{/* Sidebar */}
+				<aside className="w-full md:w-64 flex-shrink-0 card bg-accentBlue p-4 flex flex-col gap-2 h-fit md:h-full overflow-y-auto">
+					<div className="mb-6 flex flex-col gap-4">
+						<Link href="/" className="text-2xl font-poppins font-bold tracking-tight uppercase">
+							<span className="text-textMain">Collab</span>
+							<span className="text-white">Learn</span>
+						</Link>
+						<div className="flex items-center justify-between">
+							<Link href="/groups" className="font-poppins font-bold uppercase tracking-wider text-sm hover:underline decoration-2 underline-offset-4 decoration-white transition-colors">All Groups</Link>
+							<UserMenu />
+						</div>
+					</div>
+					
+					<h3 className="font-poppins font-bold text-sm tracking-wider uppercase text-textMain mb-2 px-2">Navigation</h3>
+					{links.map((link) => {
+						const isActive = pathname === link.href || (link.name !== 'Chat' && pathname?.includes(link.href));
+						return (
+							<Link 
+								key={link.name} 
+								href={link.href}
+								className={`px-4 py-3 font-poppins font-bold uppercase transition-all ${
+									isActive 
+										? 'bg-accentYellow border-[3px] border-borderMain shadow-brutal translate-x-[2px] translate-y-[2px]' 
+										: 'border-[3px] border-transparent hover:border-borderMain hover:bg-gray-100 hover:shadow-brutalHover hover:translate-y-[2px] hover:translate-x-[2px]'
+								}`}
+							>
+								{link.name}
+							</Link>
+						);
+					})}
+				</aside>
+
+				{/* Main Content Area */}
+				<main className="flex-1 min-w-0 h-full overflow-hidden">
+					{children}
+				</main>
 			</div>
 		</div>
 	);
 }
-

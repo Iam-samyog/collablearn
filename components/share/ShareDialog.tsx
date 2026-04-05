@@ -1,6 +1,6 @@
 'use client';
 import { useMemo } from 'react';
-import { QRCode } from 'qrcode.react';
+import { QRCodeSVG } from 'qrcode.react';
 import { Button } from '@/components/ui/Button';
 
 type ShareDialogProps = {
@@ -36,15 +36,15 @@ export function ShareDialog({ open, onClose, title = 'Invite to group', url }: S
 				<div className="text-lg font-semibold">{title}</div>
 				<div className="mt-3 flex flex-col items-center gap-3">
 					<div className="bg-white p-3 rounded-md">
-						<QRCode value={url} size={180} />
+						<QRCodeSVG value={url} size={180} />
 					</div>
 					<div className="w-full break-all text-xs text-muted">{url}</div>
 					<div className="flex items-center gap-2 w-full">
 						<Button onClick={copy} className="flex-1">Copy link</Button>
-						<Button onClick={onClose} variant="outline">Close</Button>
+						<Button onClick={onClose} variant="ghost">Close</Button>
 					</div>
 					{canWebShare && (
-						<Button onClick={nativeShare} variant="outline" className="w-full">Share…</Button>
+						<Button onClick={nativeShare} variant="secondary" className="w-full">Share…</Button>
 					)}
 				</div>
 			</div>

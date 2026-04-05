@@ -8,15 +8,24 @@ const config: Config = {
 	],
 	theme: {
 		extend: {
+			fontFamily: {
+				poppins: ['var(--font-poppins)', 'sans-serif'],
+				roboto: ['var(--font-roboto)', 'sans-serif'],
+				sans: ['var(--font-roboto)', 'sans-serif'],
+			},
 			colors: {
-				bg: '#0B0F14',
-				surface: '#0F141B',
-				muted: '#7A8CA0',
-				accent: '#67E8F9',
-				accentMuted: '#164E63'
+				bg: '#FDFDFA',
+				surface: '#FFFFFF',
+				textMain: '#000000',
+				borderMain: '#000000',
+				accentYellow: '#FFE347',
+				accentBlue: '#47E1FF',
+				accentPink: '#FF88DD',
+				accentGreen: '#A0FFA0',
 			},
 			boxShadow: {
-				soft: '0 4px 24px rgba(0,0,0,0.2)'
+				brutal: '4px 4px 0px 0px rgba(0,0,0,1)',
+				brutalHover: '2px 2px 0px 0px rgba(0,0,0,1)',
 			}
 		}
 	},
@@ -24,4 +33,3 @@ const config: Config = {
 };
 
 export default config;
-

@@ -3,6 +3,19 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { AuthProvider } from '@/components/auth/AuthProvider';
 import { UserMenu } from '@/components/layout/UserMenu';
+import { Poppins, Roboto } from 'next/font/google';
+
+const poppins = Poppins({
+	subsets: ['latin'],
+	weight: ['400', '500', '600', '700', '800'],
+	variable: '--font-poppins',
+});
+
+const roboto = Roboto({
+	subsets: ['latin'],
+	weight: ['400', '500', '700'],
+	variable: '--font-roboto',
+});
 
 export const metadata: Metadata = {
 	title: 'Collablearn',
@@ -11,30 +24,13 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
 	return (
-		<html lang="en">
-			<body>
+		<html lang="en" className={`${poppins.variable} ${roboto.variable}`}>
+			<body className="font-roboto tracking-wide bg-bg text-textMain min-h-dvh flex flex-col">
 				<AuthProvider>
 					<div className="min-h-dvh flex flex-col">
-						<header className="border-b border-white/5 sticky top-0 z-40 bg-bg/70 backdrop-blur-xl">
-							<div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-								<Link href="/" className="text-xl font-semibold tracking-tight">
-									<span className="text-white">Collab</span>
-									<span className="text-accent">Learn</span>
-								</Link>
-								<nav className="flex items-center gap-3 text-sm">
-									<Link href="/groups" className="hover:opacity-80">Groups</Link>
-									<UserMenu />
-								</nav>
-							</div>
-						</header>
-						<main className="flex-1">
+						<main className="flex-1 w-full h-full flex flex-col">
 							{children}
 						</main>
-						<footer className="border-t border-white/5">
-							<div className="max-w-6xl mx-auto px-4 py-6 text-xs text-muted">
-								Built with Next.js, Tailwind, and Firebase
-							</div>
-						</footer>
 					</div>
 				</AuthProvider>
 			</body>

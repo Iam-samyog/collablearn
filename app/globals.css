@@ -2,35 +2,32 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-	--radius: 10px;
-}
-
 html, body {
 	height: 100%;
 }
 
 body {
-	@apply bg-bg text-white antialiased;
+	@apply bg-bg text-textMain antialiased selection:bg-accentBlue selection:text-black;
+	font-family: var(--font-roboto), sans-serif;
 }
 
+h1, h2, h3, h4, h5, h6 {
+	@apply font-poppins font-bold text-textMain tracking-tight;
+}
+
+/* Neo-Brutalist Card */
 .card {
-	@apply bg-surface/60 backdrop-blur-xl rounded-xl shadow-soft border border-white/5;
+	@apply bg-surface border-[3px] border-borderMain shadow-brutal rounded-none transition-transform;
 }
 
 .focus-ring {
-	@apply focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-bg rounded-md;
+	@apply focus:outline-none focus-visible:ring-4 focus-visible:ring-accentYellow focus-visible:ring-offset-2 focus-visible:ring-offset-bg;
 }
 
 a {
-	@apply text-accent hover:opacity-80 transition;
+	@apply text-inherit hover:underline decoration-2 underline-offset-4 decoration-accentBlue transition-colors;
 }
 
-input, textarea, select, button {
-	@apply bg-surface/80 border border-white/10 rounded-md px-3 py-2 text-white placeholder-muted;
+input, textarea, select {
+	@apply bg-surface border-[3px] border-borderMain shadow-brutal focus:shadow-brutalHover focus:translate-x-[2px] focus:translate-y-[2px] rounded-none px-4 py-3 text-textMain placeholder-gray-500 font-roboto font-medium transition-all focus-ring;
 }
-
-button.primary {
-	@apply bg-accent text-bg font-medium hover:bg-cyan-300 transition focus-ring;
-}
-

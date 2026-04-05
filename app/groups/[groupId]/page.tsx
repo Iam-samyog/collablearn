@@ -4,6 +4,7 @@ import { initFirebase } from '@/lib/firebase';
 import { addDoc, collection, limit, onSnapshot, orderBy, query, serverTimestamp } from 'firebase/firestore';
 import { useAuth } from '@/components/auth/AuthProvider';
 import { RequireAuth } from '@/components/auth/RequireAuth';
+import { Button } from '@/components/ui/Button';
 
 type Message = {
 	id: string;
@@ -51,36 +52,47 @@ export default function GroupChatPage({ params }: { params: { groupId: string } 
 
 	return (
 		<RequireAuth>
-		<div className="grid md:grid-cols-3 gap-6">
-			<div className="md:col-span-2 card p-4 flex flex-col min-h-[420px]">
-				<div className="flex-1 space-y-2 overflow-y-auto pr-2">
-					{messages.map((m) => (
-						<div key={m.id} className="flex items-start gap-2">
-							<div className="text-xs text-muted min-w-[120px]">
-								{m.displayName ?? 'Unknown'}
-							</div>
-							<div className="flex-1">
-								<div className="text-white">{m.text}</div>
-							</div>
-						</div>
-					))}
-					{messages.length === 0 && <div className="text-muted text-sm">No messages yet. Say hello!</div>}
+			<div className="flex flex-col h-full w-full card bg-bg relative">
+				<div className="p-4 border-b-[3px] border-borderMain bg-accentBlue flex items-center justify-between">
+					<h2 className="font-poppins font-bold text-xl uppercase tracking-wider">Group Chat</h2>
 				</div>
-				<form onSubmit={sendMessage} className="mt-3 flex gap-2">
-					<input
-						placeholder="Message"
-						value={input}
-						onChange={(e) => setInput(e.target.value)}
-						className="flex-1"
-					/>
-					<button className="primary px-4 rounded-md">Send</button>
-				</form>
+				
+				<div className="flex-1 overflow-y-auto p-6 space-y-4">
+					{messages.length === 0 && (
+						<div className="text-gray-500 font-medium text-center mt-10">
+							No messages yet. Start the conversation!
+						</div>
+					)}
+					{messages.map((m) => {
+						const isMe = m.uid === user?.uid;
+						return (
+							<div key={m.id} className={`flex flex-col ${isMe ? 'items-end' : 'items-start'}`}>
+								<span className="text-xs font-bold mb-1 px-1">
+									{isMe ? 'You' : (m.displayName ?? 'Unknown')}
+								</span>
+								<div 
+									className={`px-4 py-3 border-[3px] border-borderMain shadow-brutal max-w-[80%] md:max-w-[70%] ${
+										isMe ? 'bg-accentYellow' : 'bg-white'
+									}`}
+								>
+									<p className="font-roboto font-medium whitespace-pre-wrap break-words">{m.text}</p>
+								</div>
+							</div>
+						);
+					})}
+				</div>
+				<div className="p-4 border-t-[3px] border-borderMain bg-white shrink-0">
+					<form onSubmit={sendMessage} className="flex gap-4">
+						<input
+							placeholder="Type your message..."
+							value={input}
+							onChange={(e) => setInput(e.target.value)}
+							className="flex-1 w-full"
+						/>
+						<Button variant="accent" type="submit">SEND MESSAGE</Button>
+					</form>
+				</div>
 			</div>
-			<aside className="card p-4">
-				<div className="text-sm text-muted">This is your group chat. Use the tabs above to access the whiteboard, video calls, quizzes, and music player.</div>
-			</aside>
-		</div>
 		</RequireAuth>
 	);
 }
-
