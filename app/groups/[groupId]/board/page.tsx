@@ -239,14 +239,16 @@ export default function BoardPage({ params }: { params: { groupId: string } }) {
 		}
 	}
 
+	const [isExpanded, setIsExpanded] = useState(false);
+
 	return (
 		<RequireAuth>
 			<div className="flex flex-col h-full w-full card bg-bg relative">
-				{/* Neo-brutalist Toolbar */}
-				<div className="p-4 border-b-[3px] border-borderMain bg-white flex flex-col xl:flex-row xl:items-center justify-between gap-4 z-10 shrink-0">
-					<div className="flex items-center gap-6 overflow-x-auto py-2 px-1 xl:py-2 custom-scrollbar">
-						
-						{/* Tools Section */}
+				{/* Neo-brutalist Toolbar Main Row */}
+				<div className="px-4 py-2 border-b-[3px] border-borderMain bg-white flex flex-col xl:flex-row xl:items-center justify-between gap-4 z-20 shrink-0 relative">
+					
+					<div className="flex items-center gap-6 overflow-x-auto py-2 px-1 custom-scrollbar w-full xl:w-auto">
+						{/* Core Tools Section */}
 						<div className="flex items-center gap-2 shrink-0">
 							<button 
 								onClick={() => setActiveTool('pen')}
@@ -281,7 +283,7 @@ export default function BoardPage({ params }: { params: { groupId: string } }) {
 									key={t.name}
 									onClick={() => setWidth(t.value)}
 									className={`px-3 py-2 border-[3px] border-borderMain font-bold uppercase text-xs transition-all ${
-										width === t.value && activeTool === 'pen' ? 'bg-black text-white shadow-brutal translate-x-[2px] translate-y-[2px]' : 'hover:bg-gray-100 hover:shadow-brutalHover hover:-translate-x-[1px] hover:-translate-y-[1px]'
+										width === t.value && activeTool === 'pen' ? 'bg-black text-white shadow-brutal translate-x-[2px] translate-y-[2px]' : 'bg-white hover:bg-gray-100 hover:shadow-brutalHover hover:-translate-x-[1px] hover:-translate-y-[1px]'
 									}`}
 								>
 									{t.name}
@@ -290,7 +292,7 @@ export default function BoardPage({ params }: { params: { groupId: string } }) {
 						</div>
 
 						{/* Colors */}
-						<div className={`flex items-center gap-2 border-l-[3px] border-borderMain pl-6 shrink-0 ${activeTool === 'eraser' ? 'opacity-30 pointer-events-none' : ''}`}>
+						<div className={`flex items-center flex-wrap gap-2 border-l-[3px] border-borderMain pl-6 shrink-0 ${activeTool === 'eraser' ? 'opacity-30 pointer-events-none' : ''}`}>
 							{COLORS.map((c) => {
 								const isActive = color === c.hex;
 								return (
@@ -310,29 +312,70 @@ export default function BoardPage({ params }: { params: { groupId: string } }) {
 								);
 							})}
 						</div>
-
-						{/* Zoom Controls */}
-						<div className="flex items-center gap-1 border-l-[3px] border-borderMain pl-6 shrink-0">
-							<button onClick={() => performZoom(-1)} className="p-2 border-[3px] border-borderMain bg-white hover:bg-gray-100 hover:-translate-y-[1px] transition-all rounded-md" title="Zoom Out">
-								<ZoomOut className="w-4 h-4" />
-							</button>
-							<div className="w-12 text-center text-xs font-bold font-poppins">{Math.round(zoom * 100)}%</div>
-							<button onClick={() => performZoom(1)} className="p-2 border-[3px] border-borderMain bg-white hover:bg-gray-100 hover:-translate-y-[1px] transition-all rounded-md" title="Zoom In">
-								<ZoomIn className="w-4 h-4" />
-							</button>
-							<button onClick={resetViewport} className="p-2 border-[3px] border-borderMain bg-white hover:bg-gray-100 hover:-translate-y-[1px] transition-all rounded-md ml-1" title="Reset Viewport">
-								<Maximize className="w-4 h-4" />
-							</button>
-						</div>
 					</div>
 
-					<button 
-						onClick={clearBoard}
-						disabled={clearing}
-						className="flex items-center justify-center gap-2 px-4 py-2 border-[3px] border-borderMain font-bold uppercase bg-red-400 hover:bg-red-500 text-white transition-all hover:shadow-brutalHover shrink-0"
-					>
-						<Trash2 className="w-4 h-4" /> {clearing ? "..." : "Clear"}
-					</button>
+					{/* Right Side Toggles */}
+					<div className="flex items-center justify-end gap-3 shrink-0">
+						{/* Expand Toggle */}
+						<button 
+							onClick={() => setIsExpanded(!isExpanded)}
+							className={`flex items-center justify-center p-2 border-[3px] border-borderMain font-bold uppercase transition-all ${
+								isExpanded ? 'bg-black text-white hover:bg-black translate-x-[2px] translate-y-[2px] shadow-sm' : 'bg-white shadow-brutal hover:-translate-x-[1px] hover:-translate-y-[1px]'
+							}`}
+							title="Zoom Controls"
+						>
+							<div className="flex items-center gap-1">
+								<div className="w-1.5 h-1.5 rounded-full bg-current"></div>
+								<div className="w-1.5 h-1.5 rounded-full bg-current"></div>
+								<div className="w-1.5 h-1.5 rounded-full bg-current"></div>
+							</div>
+						</button>
+
+						{/* Global Clear Board */}
+						<button 
+							onClick={clearBoard}
+							disabled={clearing}
+							className="hidden md:flex items-center justify-center gap-2 px-4 py-2 border-[3px] border-borderMain font-bold uppercase bg-red-400 hover:bg-red-500 text-white transition-all hover:shadow-brutalHover shrink-0"
+						>
+							<Trash2 className="w-4 h-4" /> {clearing ? "..." : "Clear"}
+						</button>
+					</div>
+
+				</div>
+				
+				{/* Expanded Options Drawer (Zoom & Mobile Actions) */}
+				<div 
+					className={`bg-gray-50 border-b-[3px] border-borderMain transition-all overflow-hidden relative z-10 ${
+						isExpanded ? 'max-h-[500px] border-b-[3px]' : 'max-h-0 border-b-0'
+					}`}
+				>
+					<div className="p-4 flex flex-wrap items-center gap-6">
+						{/* Zoom Controls */}
+						<div className="flex flex-col gap-2 shrink-0">
+							<span className="text-xs font-bold uppercase tracking-wider text-textMuted/50 px-1">Zoom View</span>
+							<div className="flex items-center gap-1 bg-white p-1 border-[3px] border-borderMain rounded-md shadow-brutal">
+								<button onClick={() => performZoom(-1)} className="p-2 border-[3px] border-transparent hover:border-borderMain hover:bg-gray-100 transition-all rounded-md" title="Zoom Out">
+									<ZoomOut className="w-4 h-4" />
+								</button>
+								<div className="w-12 text-center text-xs font-bold font-poppins">{Math.round(zoom * 100)}%</div>
+								<button onClick={() => performZoom(1)} className="p-2 border-[3px] border-transparent hover:border-borderMain hover:bg-gray-100 transition-all rounded-md" title="Zoom In">
+									<ZoomIn className="w-4 h-4" />
+								</button>
+								<button onClick={resetViewport} className="p-2 border-[3px] border-transparent border-l-borderMain rounded-none hover:bg-gray-100 transition-all ml-1" title="Reset Viewport">
+									<Maximize className="w-4 h-4" />
+								</button>
+							</div>
+						</div>
+
+						{/* Mobile Clear Board (Hidden on Desktop) */}
+						<button 
+							onClick={clearBoard}
+							disabled={clearing}
+							className="md:hidden flex items-center justify-center gap-2 w-full mt-2 px-4 py-3 border-[3px] border-borderMain font-bold uppercase bg-red-400 hover:bg-red-500 text-white transition-all hover:shadow-brutalHover shrink-0"
+						>
+							<Trash2 className="w-4 h-4" /> {clearing ? "..." : "Clear Board"}
+						</button>
+					</div>
 				</div>
 				
 				{/* Canvas Workspace */}
