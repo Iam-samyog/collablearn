@@ -54,16 +54,16 @@ export default function GroupChatPage({ params }: { params: { groupId: string } 
 		<RequireAuth>
 			<div className="flex flex-col h-full w-full bg-white relative overflow-hidden p-12">
 				{/* Maximalist Backdrop */}
-				<div className="absolute top-0 right-0 text-[30vw] font-black uppercase text-black/[0.01] select-none pointer-events-none -translate-x-1/4 leading-none">
+				<div className="absolute top-0 right-0 text-[30vw] font-black text-black/[0.01] select-none pointer-events-none -translate-x-1/4 leading-none">
 					CHAT
 				</div>
 
 				<div className="relative z-10 flex flex-col h-full max-w-[1200px] mx-auto w-full">
 					<div className="mb-12 flex items-center justify-between px-4">
-						<h2 className="text-5xl font-black uppercase tracking-tighter text-deepInk">
+						<h2 className="text-5xl font-black tracking-tighter text-deepInk">
 							Group <span className="text-neonLime">Chat</span>
 						</h2>
-						<div className="text-[10px] font-black uppercase tracking-[0.5em] text-deepInk/20">
+						<div className="text-[10px] font-black tracking-[0.5em] text-deepInk/20">
 							/ Real-time Stream
 						</div>
 					</div>
@@ -71,8 +71,8 @@ export default function GroupChatPage({ params }: { params: { groupId: string } 
 					<div className="flex-1 overflow-y-auto px-4 py-8 space-y-10 custom-scrollbar">
 						{messages.length === 0 && (
 							<div className="flex flex-col items-center justify-center h-full opacity-20">
-								<p className="text-4xl font-black uppercase tracking-tighter italic">Silence is golden.</p>
-								<p className="text-[10px] font-bold uppercase tracking-[0.5em] mt-4">But talking is better.</p>
+								<p className="text-4xl font-black tracking-tighter italic">Silence is golden.</p>
+								<p className="text-[10px] font-bold tracking-[0.5em] mt-4">But talking is better.</p>
 							</div>
 						)}
 						{messages.map((m) => {
@@ -80,10 +80,10 @@ export default function GroupChatPage({ params }: { params: { groupId: string } 
 							return (
 								<div key={m.id} className={`group flex flex-col ${isMe ? 'items-end' : 'items-start'}`}>
 									<div className={`flex items-baseline gap-4 mb-2 ${isMe ? 'flex-row-reverse' : 'flex-row'}`}>
-										<span className="text-[10px] font-black uppercase tracking-[0.2em] text-deepInk">
+										<span className="text-[10px] font-black tracking-[0.2em] text-deepInk">
 											{isMe ? 'YOU' : (m.displayName ?? 'ANON')}
 										</span>
-										<span className="text-[8px] font-bold text-deepInk/20 uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
+										<span className="text-[8px] font-bold text-deepInk/20 tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
 											{new Date(m.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
 										</span>
 									</div>
@@ -105,7 +105,7 @@ export default function GroupChatPage({ params }: { params: { groupId: string } 
 								placeholder="SEND A MESSAGE..."
 								value={input}
 								onChange={(e) => setInput(e.target.value)}
-								className="w-full bg-black/5 hover:bg-black/[0.08] focus:bg-white border-0 rounded-full px-10 py-6 text-xs font-black uppercase tracking-widest transition-all focus-ring placeholder-black/20"
+								className="w-full bg-black/5 hover:bg-black/[0.08] focus:bg-white border-0 rounded-full px-10 py-6 text-xs font-black tracking-widest transition-all focus-ring placeholder-black/20"
 							/>
 							<div className="absolute right-3">
 								<Button 

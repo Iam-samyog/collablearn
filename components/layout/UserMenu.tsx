@@ -10,12 +10,12 @@ export function UserMenu() {
 		return (
 			<div className="flex items-center gap-3">
 				<Link href="/login">
-					<Button variant="secondary" size="sm" className="shadow-none hover:shadow-brutal hover:-translate-x-0.5 hover:-translate-y-0.5">
+					<Button variant="secondary" size="lg" className="shadow-none hover:shadow-brutal hover:-translate-x-0.5 hover:-translate-y-0.5">
 						Login
 					</Button>
 				</Link>
 				<Link href="/signup">
-					<Button variant="accent" size="sm">
+					<Button variant="accent" size="lg">
 						Sign up
 					</Button>
 				</Link>
@@ -29,11 +29,11 @@ export function UserMenu() {
 		<div className="flex items-center gap-6">
 			<div className="flex items-center gap-3 group cursor-default">
 				<div className="w-2 h-2 rounded-full bg-neonLime animate-pulse"></div>
-				<span className="text-[10px] font-black uppercase tracking-[0.2em] text-textMain/60 group-hover:text-textMain transition-colors">
+				<span className="text-[12px] font-black tracking-[0.2em] ">
 					{display}
 				</span>
 			</div>
-			<Button variant="ghost" size="sm" onClick={() => logout()} className="text-[10px] hover:text-red-500 hover:bg-red-50/50">
+			<Button variant="ghost" size="lg" onClick={() => logout()} className="text-[12px] hover:text-black hover:bg-red-500">
 				Sign out
 			</Button>
 		</div>

@@ -20,7 +20,7 @@ export default function GroupLayout({ children, params }: { children: React.Reac
 	return (
 		<div className="bg-white w-full flex flex-col flex-1 h-full min-h-screen relative overflow-hidden">
 			{/* Decorative Backdrop */}
-			<div className="absolute top-0 left-0 text-[20vw] font-black uppercase text-black/[0.01] select-none pointer-events-none -translate-x-1/4 leading-none">
+			<div className="absolute top-0 left-0 text-[20vw] font-black text-black/[0.01] select-none pointer-events-none -translate-x-1/4 leading-none">
 				HUB
 			</div>
 
@@ -28,8 +28,8 @@ export default function GroupLayout({ children, params }: { children: React.Reac
 				{/* High-Saturation Neon Sidebar */}
 				<aside className="w-full md:w-80 flex-shrink-0 p-12 flex flex-col h-fit md:h-full overflow-y-auto border-r border-deepInk/10 bg-neonLime">
 					<div className="mb-20 flex flex-col gap-4">
-						<Link href="/" className="text-4xl font-poppins font-black uppercase tracking-tighter text-deepInk">
-							COLLABLEARN.
+						<Link href="/" className="text-4xl font-poppins font-black tracking-tight text-deepInk">
+							Collab Learn.
 						</Link>
 					</div>
 					
@@ -46,7 +46,7 @@ export default function GroupLayout({ children, params }: { children: React.Reac
 											: 'text-deepInk/40 hover:text-deepInk hover:translate-x-4'
 									}`}
 								>
-									<span className="text-lg font-poppins font-black uppercase tracking-[0.1em] leading-none">{link.name}</span>
+									<span className="text-lg font-poppins font-semibold tracking-normal leading-none">{link.name}</span>
 									<div className={`w-3 h-3 rounded-full transition-all duration-500 ${isActive ? 'bg-deepInk scale-150' : 'bg-transparent group-hover:bg-deepInk/30'}`}></div>
 								</Link>
 							);
@@ -59,23 +59,23 @@ export default function GroupLayout({ children, params }: { children: React.Reac
 								{user?.displayName?.[0] || user?.email?.[0] || 'U'}
 							</div>
 							<div className="flex flex-col">
-								<span className="text-[10px] font-poppins font-black uppercase tracking-widest text-deepInk truncate max-w-[120px]">
+								<span className="text-sm font-poppins font-semibold text-deepInk truncate max-w-[120px]">
 									{user?.displayName || user?.email?.split('@')[0] || 'User'}
 								</span>
-								<span className="text-[8px] font-poppins font-bold text-deepInk/40 uppercase tracking-widest">Active Now</span>
+								<span className="text-xs font-poppins text-deepInk/50">Active now</span>
 							</div>
 						</div>
 						
 						<div className="flex flex-col gap-2">
 							<Link 
 								href="/groups"
-								className="text-[10px] font-poppins font-black uppercase tracking-[0.2em] text-deepInk/60 hover:text-deepInk transition-colors"
+								className="text-sm font-poppins font-medium text-deepInk/60 hover:text-deepInk transition-colors"
 							>
 								Back to Dashboard
 							</Link>
 							<button 
 								onClick={() => logout()}
-								className="text-left text-[10px] font-poppins font-black uppercase tracking-[0.2em] text-deepInk/60 hover:text-red-600 transition-colors"
+								className="text-left text-sm font-poppins font-medium text-deepInk/60 hover:text-red-600 transition-colors"
 							>
 								Terminate Session
 							</button>

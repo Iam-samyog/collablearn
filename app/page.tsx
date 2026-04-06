@@ -9,25 +9,22 @@ export default function HomePage() {
 			<BackgroundTypewriter />
 			
 			{/* Hero Section - Maximalist Left-Align */}
-			<section className="pt-64 pb-32 max-w-[1600px] mx-auto px-12 relative">
-				<div className="absolute top-48 left-12 text-sm font-black uppercase tracking-[0.5em] text-neonLime flex items-center gap-4">
-					<div className="w-12 h-[2px] bg-neonLime"></div>
-					01. The New Standard
-				</div>
-				<h1 className="text-8xl md:text-[12rem] font-black tracking-tighter text-deepInk mb-12 uppercase leading-[0.85] max-w-[1200px]">
-					Work <span className="text-neonLime outline-text">Together</span> <br/>
-					Study Faster.
+			<section className="pt-48 pb-32 max-w-[1600px] mx-auto px-12 relative">
+				
+				<h1 className="text-8xl md:text-[12rem] font-black tracking-tighter text-deepInk mb-12 leading-[0.85] max-w-[1400px]">
+					Work <span className="text-neonLime outline-text">Together.</span> <br/>
+					<span className="text-deepInk outline-text leading-[0.5em]">Study Faster.</span>
 				</h1>
-				<p className="text-xl md:text-3xl font-bold text-deepInk/40 mb-16 max-w-[800px] uppercase tracking-tight leading-tight">
-					CollabLearn is the high-performance workspace where better, faster work happens. Built for the next generation of builders.
+				<p className="text-xl md:text-xl font-bold text-deepInk/40 mb-10 max-w-[800px]  tracking-tight leading-tight">
+					CollabLearn is the high-performance workspace where better, faster work happens. Built for the next generation of studnets.
 				</p>
-				<div className="flex flex-col sm:flex-row items-start justify-start gap-8">
+				<div className="flex flex-col sm:flex-row items-start justify-start gap-6">
 					<Link href="/signup">
-						<Button variant="accent" size="lg" className="text-xl px-16 py-8">
+						<Button variant="accent" size="md" className="text-lg px-16 py-8 ">
 							Start Building Free
 						</Button>
 					</Link>
-					<Link href="/groups" className="group flex items-center gap-4 text-xs font-black uppercase tracking-[0.3em] py-8">
+					<Link href="/groups" className="group flex items-center gap-4 text-lg font-black  py-8">
 						Explore the community
 						<div className="w-10 h-10 rounded-full border border-black/10 flex items-center justify-center group-hover:bg-neonLime group-hover:border-neonLime transition-all">
 							<ArrowRight className="w-4 h-4" />
@@ -39,10 +36,10 @@ export default function HomePage() {
 			{/* Reviews Section - Asymmetric Art Gallery */}
 			<section className="mt-64 mb-96 px-12 relative max-w-[1800px] mx-auto">
 				<div className="flex justify-between items-end mb-24">
-					<h2 className="text-7xl font-black uppercase tracking-tighter leading-none">
+					<h2 className="text-7xl font-black tracking-tighter leading-none">
 						Trusted by <br/> <span className="text-neonLime">10,000+</span> Builders
 					</h2>
-					<div className="text-xs font-black uppercase tracking-[0.4em] text-textMain/20 mb-2">
+					<div className="text-xs font-black tracking-[0.4em] text-textMain/20 mb-2">
 						/ Testimonials
 					</div>
 				</div>
@@ -78,7 +75,7 @@ export default function HomePage() {
 							<div className="w-16 h-16 rounded-full bg-neonLime mb-6 flex items-center justify-center">
 								<ArrowRight className="w-6 h-6" />
 							</div>
-							<h4 className="font-black uppercase tracking-widest text-xs">Join the Movement</h4>
+							<h4 className="font-black tracking-widest text-xs">Join the Movement</h4>
 						</div>
 					</div>
 				</div>
@@ -109,25 +106,25 @@ export default function HomePage() {
 			<footer className="pt-32 pb-16 relative overflow-hidden bg-white px-12 border-t border-black/5">
 				<div className="max-w-[1600px] mx-auto">
 					<div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-12 mb-32">
-						<Link href="/" className="text-6xl font-black uppercase tracking-tighter hover:text-neonLime transition-colors">
+						<Link href="/" className="text-6xl font-black tracking-tighter hover:text-neonLime transition-colors">
 							COLLABLERN.
 						</Link>
 						<nav className="flex flex-wrap gap-x-16 gap-y-8">
-							<Link href="#" className="text-xs font-black uppercase tracking-[0.3em] hover:text-neonLime">Board</Link>
-							<Link href="#" className="text-xs font-black uppercase tracking-[0.3em] hover:text-neonLime">Video</Link>
-							<Link href="#" className="text-xs font-black uppercase tracking-[0.3em] hover:text-neonLime">Chat</Link>
-							<Link href="#" className="text-xs font-black uppercase tracking-[0.3em] hover:text-neonLime">Docs</Link>
+							<Link href="#" className="text-xs font-black tracking-[0.3em] hover:text-neonLime">Board</Link>
+							<Link href="#" className="text-xs font-black tracking-[0.3em] hover:text-neonLime">Video</Link>
+							<Link href="#" className="text-xs font-black tracking-[0.3em] hover:text-neonLime">Chat</Link>
+							<Link href="#" className="text-xs font-black tracking-[0.3em] hover:text-neonLime">Docs</Link>
 						</nav>
 					</div>
 					
 					<div className="pt-16 border-t border-black/10 flex flex-col md:flex-row items-center justify-between gap-8">
 						<div className="flex flex-col gap-2">
-							<p className="text-[10px] font-black text-textMain/40 uppercase tracking-[0.2em]">© {new Date().getFullYear()} CollabLearn. High-Performance Study.</p>
+							<p className="text-[10px] font-black text-textMain/40 tracking-[0.2em]">© {new Date().getFullYear()} CollabLearn. High-Performance Study.</p>
 						</div>
 						<div className="flex items-center gap-12">
-							<Link href="#" className="text-[10px] font-black text-textMain/40 uppercase tracking-widest hover:text-black">Privacy</Link>
-							<Link href="#" className="text-[10px] font-black text-textMain/40 uppercase tracking-widest hover:text-black">Terms</Link>
-							<div className="text-[10px] font-black uppercase tracking-[0.5em] text-neonLime">
+							<Link href="#" className="text-[10px] font-black text-textMain/40 tracking-widest hover:text-black">Privacy</Link>
+							<Link href="#" className="text-[10px] font-black text-textMain/40 tracking-widest hover:text-black">Terms</Link>
+							<div className="text-[10px] font-black tracking-[0.5em] text-neonLime">
 								BUILD_v1.0
 							</div>
 						</div>
@@ -143,11 +140,11 @@ function ReviewCard({ name, role, quote, color, dark = false }: { name: string, 
 		<div className={`p-16 rounded-[4rem] transition-all duration-700 ${color} ${dark ? 'text-white' : 'text-deepInk'} shadow-soft hover:shadow-max group cursor-default h-full flex flex-col justify-between`}>
 			<div>
 				<div className={`text-6xl font-black mb-12 opacity-20 ${dark ? 'text-white' : 'text-black'}`}>“</div>
-				<p className="text-3xl font-black leading-[1.1] mb-16 tracking-tighter uppercase italic">{quote}</p>
+				<p className="text-3xl font-black leading-[1.1] mb-16 tracking-tighter italic">{quote}</p>
 			</div>
 			<div className="pt-8 border-t border-current/10">
-				<h4 className="font-black uppercase tracking-widest text-sm mb-2">{name}</h4>
-				<p className="text-[10px] font-bold opacity-60 uppercase tracking-widest">{role}</p>
+				<h4 className="font-black tracking-widest text-sm mb-2">{name}</h4>
+				<p className="text-[10px] font-bold opacity-60 tracking-widest">{role}</p>
 			</div>
 		</div>
 	);
@@ -166,8 +163,8 @@ function FeatureCard({ icon, title, description, index }: { icon: React.ReactNod
 					{index}
 				</div>
 			</div>
-			<h3 className="font-black text-textMain text-4xl mb-6 uppercase tracking-tighter leading-none">{title}</h3>
-			<p className="text-textMain/60 leading-relaxed font-bold uppercase text-xs tracking-widest group-hover:text-black transition-colors">{description}</p>
+			<h3 className="font-black text-textMain text-4xl mb-6 tracking-tighter leading-none">{title}</h3>
+			<p className="text-textMain/60 leading-relaxed font-bold text-xs tracking-widest group-hover:text-black transition-colors">{description}</p>
 		</div>
 	);
 }

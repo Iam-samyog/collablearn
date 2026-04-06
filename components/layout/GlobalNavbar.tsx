@@ -13,23 +13,23 @@ export function GlobalNavbar() {
 
 	return (
 		<div className="fixed top-8 left-0 right-0 z-50 flex justify-center px-6 pointer-events-none">
-			<header className="pointer-events-auto bg-white/70 backdrop-blur-xl border border-white/20 shadow-soft flex items-center justify-between px-10 py-5 w-full max-w-[1400px] gap-12 rounded-full">
-				{/* Brand Logo - Maximalist Type */}
-				<Link href="/" className="inline-flex items-center gap-0 group">
-					<span className="text-4xl font-poppins font-black uppercase tracking-tighter text-textMain transition-all leading-none group-hover:tracking-normal">COLLAB</span>
-					<span className="text-4xl font-poppins font-black uppercase tracking-tighter text-neonLime bg-deepInk px-3 py-1 leading-none -rotate-1 group-hover:rotate-0 transition-all">LEARN</span>
+			<header className="pointer-events-auto bg-neonLime flex items-center justify-between px-10 py-5 w-full max-w-[1400px] gap-12 rounded-full shadow-lg">
+				{/* Brand Logo */}
+				<Link href="/" className="inline-flex items-center gap-1 group">
+					<span className="text-3xl font-poppins font-black tracking-tight text-deepInk leading-none">Collab</span>
+					<span className="text-3xl font-poppins font-black tracking-tight text-white bg-deepInk pr-3 pl-1 py-1 leading-none">Learn.</span>
 				</Link>
 
-				{/* Primary Nav - Minimalist */}
+				{/* Primary Nav */}
 				<nav className="flex items-center gap-10">
 					<Link 
 						href="/groups" 
-						className="hidden sm:block text-xs font-black uppercase tracking-[0.2em] text-textMain/40 hover:text-textMain transition-all relative after:absolute after:-bottom-2 after:left-0 after:w-0 after:h-[2px] after:bg-neonLime hover:after:w-full after:transition-all after:duration-500"
+						className="hidden sm:block text-sm font-poppins font-semibold text-deepInk/60 hover:text-deepInk transition-all"
 					>
 						Explore Groups
 					</Link>
 					
-					<div className="h-6 w-[1px] bg-black/10 hidden sm:block"></div>
+					<div className="h-6 w-[1px] bg-deepInk/20 hidden sm:block"></div>
 
 					<UserMenu />
 				</nav>

@@ -245,7 +245,7 @@ export default function BoardPage({ params }: { params: { groupId: string } }) {
 		<RequireAuth>
 			<div className="flex flex-col h-full w-full bg-white relative overflow-hidden">
 				{/* Maximalist Background Texture */}
-				<div className="absolute top-0 left-0 text-[35vw] font-black uppercase text-black/[0.02] select-none pointer-events-none -translate-x-1/4 -translate-y-1/4 leading-none">
+				<div className="absolute top-0 left-0 text-[35vw] font-black text-black/[0.02] select-none pointer-events-none -translate-x-1/4 -translate-y-1/4 leading-none">
 					DRAFT
 				</div>
 
@@ -326,7 +326,7 @@ export default function BoardPage({ params }: { params: { groupId: string } }) {
 								<button
 									key={t.name}
 									onClick={() => setWidth(t.value)}
-									className={`text-[8px] font-black uppercase tracking-[0.3em] px-4 py-2 rounded-full transition-all ${
+									className={`text-[8px] font-black tracking-[0.3em] px-4 py-2 rounded-full transition-all ${
 										width === t.value && activeTool === 'pen' ? 'bg-deepInk text-white' : 'hover:bg-black/5 text-deepInk/40'
 									}`}
 								>

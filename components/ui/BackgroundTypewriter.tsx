@@ -36,7 +36,7 @@ function TypewriterLine({ phrase }: { phrase: string }) {
 	}, [text, isDeleting, phrase]);
 
 	return (
-		<div className="text-[25vw] font-poppins font-black uppercase tracking-tighter whitespace-nowrap text-textMain opacity-[0.03] leading-[0.8] transition-all duration-300">
+		<div className="text-[25vw] font-poppins font-black tracking-tighter whitespace-nowrap text-textMain opacity-[0.03] leading-[0.8] transition-all duration-300">
 			{text}
 		</div>
 	);

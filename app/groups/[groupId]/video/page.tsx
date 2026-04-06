@@ -70,20 +70,20 @@ const StreamVideo = ({ stream, name, isLocal, camOn, cameraError }: { stream: Me
 	return (
 		<div className={`relative rounded-[4rem] min-h-[350px] flex flex-col justify-center overflow-hidden transition-all duration-700 ${isSpeaking ? 'ring-8 ring-neonLime shadow-max scale-[1.02] z-20' : 'border border-black/5 shadow-soft z-10'} ${isLocal ? "bg-softBlush" : "bg-white"}`}>
 			{/* Typographic Label Sticker */}
-			<div className={`absolute top-8 left-8 z-30 px-6 py-2 text-[10px] font-black font-poppins uppercase tracking-[0.3em] ${isSpeaking ? 'bg-neonLime text-deepInk' : isLocal ? 'bg-deepInk text-white' : 'bg-white text-deepInk border border-black/5'} shadow-soft`}>
+			<div className={`absolute top-8 left-8 z-30 px-6 py-2 text-[10px] font-black font-poppins tracking-[0.3em] ${isSpeaking ? 'bg-neonLime text-deepInk' : isLocal ? 'bg-deepInk text-white' : 'bg-white text-deepInk border border-black/5'} shadow-soft`}>
 				{name} {isSpeaking && "/ SPEAKING"}
 			</div>
 
 			{isLocal && cameraError && (
 				<div className="absolute inset-0 flex flex-col items-center justify-center bg-red-500 z-40 p-8 text-center text-white">
 					<X className="w-12 h-12 mb-4" />
-					<h3 className="text-2xl font-black uppercase tracking-tighter">Hardware Lock</h3>
-					<p className="text-xs font-bold opacity-80 uppercase tracking-widest mt-2">{cameraError}</p>
+					<h3 className="text-2xl font-black tracking-tighter">Hardware Lock</h3>
+					<p className="text-xs font-bold opacity-80 tracking-widest mt-2">{cameraError}</p>
 				</div>
 			)}
 
 			{showAsOff && !cameraError && (
-				<div className="absolute inset-0 flex flex-col items-center justify-center text-deepInk font-poppins font-black uppercase tracking-tighter opacity-[0.03] text-[15vw] select-none">
+				<div className="absolute inset-0 flex flex-col items-center justify-center text-deepInk font-poppins font-black tracking-tighter opacity-[0.03] text-[15vw] select-none">
 					OFF
 				</div>
 			)}
@@ -357,7 +357,7 @@ export default function VideoPage({ params }: { params: { groupId: string } }) {
 		<RequireAuth>
 			<div className="flex-1 bg-white relative overflow-hidden flex flex-col p-12">
 				{/* Maximalist Texture Layer */}
-				<div className="absolute top-0 right-0 text-[30vw] font-black uppercase text-black/[0.02] select-none pointer-events-none -translate-y-1/4 translate-x-1/4 leading-none">
+				<div className="absolute top-0 right-0 text-[30vw] font-black text-black/[0.02] select-none pointer-events-none -translate-y-1/4 translate-x-1/4 leading-none">
 					LIVE
 				</div>
 
@@ -365,11 +365,11 @@ export default function VideoPage({ params }: { params: { groupId: string } }) {
 					<div className="flex items-center justify-between mb-16 px-4">
 						<div className="flex items-center gap-6">
 							<div className="w-4 h-4 bg-red-500 rounded-full animate-ping"></div>
-							<h1 className="text-5xl font-black uppercase tracking-tighter text-deepInk">
+							<h1 className="text-5xl font-black tracking-tighter text-deepInk">
 								Video <span className="text-neonLime">Room</span>
 							</h1>
 						</div>
-						<div className="text-[10px] font-black uppercase tracking-[0.5em] text-deepInk/20">
+						<div className="text-[10px] font-black tracking-[0.5em] text-deepInk/20">
 							/ {Object.keys(peers).length + 1} Members Active
 						</div>
 					</div>
@@ -434,7 +434,7 @@ export default function VideoPage({ params }: { params: { groupId: string } }) {
 						{/* Screen Share Toggle */}
 						<button 
 							onClick={isScreenSharing ? stopScreenShare : startScreenShare} 
-							className={`h-16 px-10 flex items-center gap-3 rounded-full font-black uppercase tracking-[0.2em] text-[10px] transition-all duration-300 shadow-soft ${
+							className={`h-16 px-10 flex items-center gap-3 rounded-full font-black tracking-[0.2em] text-[10px] transition-all duration-300 shadow-soft ${
 								!isScreenSharing 
 									? 'bg-neonLime text-deepInk hover:scale-105 active:scale-95' 
 									: 'bg-red-500 text-white shadow-max scale-105'
