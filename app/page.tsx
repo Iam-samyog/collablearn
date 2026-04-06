@@ -1,122 +1,136 @@
 import Link from 'next/link';
 import { ArrowRight, BookOpen, MessageSquare, MonitorPlay, PencilRuler } from 'lucide-react';
 import { BackgroundTypewriter } from '@/components/ui/BackgroundTypewriter';
+import { Button } from '@/components/ui/Button';
 
 export default function HomePage() {
 	return (
-		<div className="flex flex-col min-h-screen relative overflow-hidden z-0">
+		<div className="relative overflow-x-hidden z-0 bg-white min-h-screen">
 			<BackgroundTypewriter />
-			<main className="flex-1 w-full max-w-[1200px] mx-auto px-4 mt-8">
-				{/* Hero Section */}
-				<section className="pt-32 pb-16 text-center max-w-[800px] mx-auto">
-					<h1 className="text-5xl md:text-7xl font-bold tracking-tight text-textMain mb-6 italic uppercase underline decoration-accentPink decoration-[8px]">
-						Your wiki, docs, & projects. Together.
-					</h1>
-					<h2 className="text-xl md:text-2xl font-medium text-textMain mb-10 text-balance uppercase tracking-tight">
-						CollabLearn is the focused workspace where better, faster work happens.
-					</h2>
-					<div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-						<Link 
-							href="/signup" 
-							className="group inline-flex items-center justify-center gap-2 bg-textMain text-white px-10 py-5 border-[3px] border-borderMain shadow-brutal hover:shadow-brutalHover hover:-translate-x-1 hover:-translate-y-1 transition-all rounded-[4px] font-black uppercase tracking-widest w-full sm:w-auto text-lg"
-						>
-							Get CollabLearn free
-							<ArrowRight className="w-5 h-5 group-hover:translate-x-0.5 transition-transform" />
-						</Link>
-					</div>
-				</section>
+			
+			{/* Hero Section - Maximalist Left-Align */}
+			<section className="pt-64 pb-32 max-w-[1600px] mx-auto px-12 relative">
+				<div className="absolute top-48 left-12 text-sm font-black uppercase tracking-[0.5em] text-neonLime flex items-center gap-4">
+					<div className="w-12 h-[2px] bg-neonLime"></div>
+					01. The New Standard
+				</div>
+				<h1 className="text-8xl md:text-[12rem] font-black tracking-tighter text-deepInk mb-12 uppercase leading-[0.85] max-w-[1200px]">
+					Work <span className="text-neonLime outline-text">Together</span> <br/>
+					Study Faster.
+				</h1>
+				<p className="text-xl md:text-3xl font-bold text-deepInk/40 mb-16 max-w-[800px] uppercase tracking-tight leading-tight">
+					CollabLearn is the high-performance workspace where better, faster work happens. Built for the next generation of builders.
+				</p>
+				<div className="flex flex-col sm:flex-row items-start justify-start gap-8">
+					<Link href="/signup">
+						<Button variant="accent" size="lg" className="text-xl px-16 py-8">
+							Start Building Free
+						</Button>
+					</Link>
+					<Link href="/groups" className="group flex items-center gap-4 text-xs font-black uppercase tracking-[0.3em] py-8">
+						Explore the community
+						<div className="w-10 h-10 rounded-full border border-black/10 flex items-center justify-center group-hover:bg-neonLime group-hover:border-neonLime transition-all">
+							<ArrowRight className="w-4 h-4" />
+						</div>
+					</Link>
+				</div>
+			</section>
 
-				{/* Reviews Section - Promoted to Hero Area */}
-				<section className="mb-24 px-4 max-w-[1000px] mx-auto">
-					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+			{/* Reviews Section - Asymmetric Art Gallery */}
+			<section className="mt-64 mb-96 px-12 relative max-w-[1800px] mx-auto">
+				<div className="flex justify-between items-end mb-24">
+					<h2 className="text-7xl font-black uppercase tracking-tighter leading-none">
+						Trusted by <br/> <span className="text-neonLime">10,000+</span> Builders
+					</h2>
+					<div className="text-xs font-black uppercase tracking-[0.4em] text-textMain/20 mb-2">
+						/ Testimonials
+					</div>
+				</div>
+				
+				<div className="grid grid-cols-1 md:grid-cols-12 gap-12 relative z-10">
+					<div className="md:col-span-5 md:pt-24">
 						<ReviewCard 
 							name="Alex Chen"
 							role="CS Student"
-							quote="The shared board is leagues ahead."
-							color="bg-accentBlue"
+							quote="The shared board is leagues ahead. We use it for every sprint planning session now. It's minimal, fast, and stays out of the way."
+							color="bg-softBlush"
 						/>
+					</div>
+					<div className="md:col-span-7">
 						<ReviewCard 
 							name="Sarah Miller"
 							role="Med Student"
-							quote="Perfect for long study sessions."
-							color="bg-accentPink"
+							quote="Perfect for long study sessions. The video quality and audio detection is incredibly helpful. I haven't used another tool since I found CollabLearn."
+							color="bg-neonLime"
 						/>
+					</div>
+					<div className="md:col-span-8">
 						<ReviewCard 
 							name="David Park"
 							role="Engineering"
-							quote="Exactly what a tool should be."
-							color="bg-accentYellow"
+							quote="Exactly what a developer tools should be—minimal, fast, and stays out of the way of work. The focus on speed is evident in every interaction."
+							color="bg-deepInk"
+							dark
 						/>
 					</div>
-				</section>
-
-				{/* Floating UI Image placeholder / Feature graphic */}
-				<div className="relative w-full max-w-[1000px] mx-auto mb-24 rounded-xl bg-white border-[3px] border-borderMain shadow-brutal aspect-video flex items-center justify-center overflow-hidden">
-					<div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
-					<div className="z-10 text-center">
-						<BookOpen className="w-16 h-16 text-textMuted mx-auto mb-4" />
-						<p className="text-textMain font-black uppercase tracking-widest">Workspace Visual Placeholder</p>
+					<div className="md:col-span-4 md:pt-48">
+						<div className="p-12 bg-white border border-black/5 rounded-[4rem] shadow-max flex flex-col items-center justify-center text-center group hover:scale-[1.05] transition-transform duration-700">
+							<div className="w-16 h-16 rounded-full bg-neonLime mb-6 flex items-center justify-center">
+								<ArrowRight className="w-6 h-6" />
+							</div>
+							<h4 className="font-black uppercase tracking-widest text-xs">Join the Movement</h4>
+						</div>
 					</div>
 				</div>
+			</section>
 
-				{/* Feature Grid - Notion style */}
-				<section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-32">
-					<FeatureCard 
-						icon={<MessageSquare className="w-6 h-6 text-blue-500" />}
-						title="Real-time Chat"
-						description="Connect instantly with your study group. Share links, notes, and collaborate effortlessly."
-					/>
-					<FeatureCard 
-						icon={<PencilRuler className="w-6 h-6 text-orange-500" />}
-						title="Shared Board"
-						description="A blank canvas for your big ideas. Draw, write, and map out concepts together."
-					/>
-					<FeatureCard 
-						icon={<MonitorPlay className="w-6 h-6 text-green-500" />}
-						title="Video Study Rooms"
-						description="Hop on a quick call to debug, review, or just hang out while pushing through exams."
-					/>
-				</section>
+			{/* Feature Grid - Minimalist Spacing */}
+			<section className="grid grid-cols-1 md:grid-cols-3 gap-0 mb-96 border-y border-black/5">
+				<FeatureCard 
+					icon={<MessageSquare className="w-10 h-10" />}
+					title="Real-time Chat"
+					description="Connect instantly with your study group. Share links, notes, and collaborate effortlessly."
+					index="01"
+				/>
+				<FeatureCard 
+					icon={<PencilRuler className="w-10 h-10" />}
+					title="Shared Board"
+					description="A blank canvas for your big ideas. Draw, write, and map out concepts together."
+					index="02"
+				/>
+				<FeatureCard 
+					icon={<MonitorPlay className="w-10 h-10" />}
+					title="Video Rooms"
+					description="Hop on a quick call to debug, review, or just hang out while pushing through exams."
+					index="03"
+				/>
+			</section>
 
-			</main>
-			
-			<footer className="border-t-[3px] border-borderMain bg-white pt-16 pb-8">
-				<div className="max-w-[1200px] mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
-					<div className="col-span-1 md:col-span-1">
-						<h2 className="text-2xl font-black tracking-tighter mb-4 italic">CollabLearn</h2>
-						<p className="text-textMuted text-sm leading-relaxed">
-							The focused workspace for groups who build, learn, and grow together.
-						</p>
+			<footer className="pt-32 pb-16 relative overflow-hidden bg-white px-12 border-t border-black/5">
+				<div className="max-w-[1600px] mx-auto">
+					<div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-12 mb-32">
+						<Link href="/" className="text-6xl font-black uppercase tracking-tighter hover:text-neonLime transition-colors">
+							COLLABLERN.
+						</Link>
+						<nav className="flex flex-wrap gap-x-16 gap-y-8">
+							<Link href="#" className="text-xs font-black uppercase tracking-[0.3em] hover:text-neonLime">Board</Link>
+							<Link href="#" className="text-xs font-black uppercase tracking-[0.3em] hover:text-neonLime">Video</Link>
+							<Link href="#" className="text-xs font-black uppercase tracking-[0.3em] hover:text-neonLime">Chat</Link>
+							<Link href="#" className="text-xs font-black uppercase tracking-[0.3em] hover:text-neonLime">Docs</Link>
+						</nav>
 					</div>
-					<div>
-						<h4 className="font-bold uppercase tracking-wider text-xs mb-6 text-textMuted">Product</h4>
-						<ul className="space-y-4 text-sm font-medium">
-							<li><Link href="#" className="hover:underline">Shared Board</Link></li>
-							<li><Link href="#" className="hover:underline">Video Rooms</Link></li>
-							<li><Link href="#" className="hover:underline">Real-time Chat</Link></li>
-						</ul>
-					</div>
-					<div>
-						<h4 className="font-bold uppercase tracking-wider text-xs mb-6 text-textMuted">Company</h4>
-						<ul className="space-y-4 text-sm font-medium">
-							<li><Link href="#" className="hover:underline">About Us</Link></li>
-							<li><Link href="#" className="hover:underline">Privacy Policy</Link></li>
-							<li><Link href="#" className="hover:underline">Terms of Service</Link></li>
-						</ul>
-					</div>
-					<div>
-						<h4 className="font-bold uppercase tracking-wider text-xs mb-6 text-textMuted">Connect</h4>
-						<ul className="space-y-4 text-sm font-medium">
-							<li><Link href="#" className="hover:underline">Twitter / X</Link></li>
-							<li><Link href="#" className="hover:underline">GitHub</Link></li>
-							<li><Link href="#" className="hover:underline">Discord</Link></li>
-						</ul>
-					</div>
-				</div>
-				<div className="max-w-[1200px] mx-auto px-4 pt-8 border-t border-borderMuted flex flex-col md:row items-center justify-between gap-4">
-					<p className="text-sm text-textMuted">© {new Date().getFullYear()} CollabLearn. All rights reserved.</p>
-					<div className="flex items-center gap-6 text-sm font-bold uppercase tracking-widest text-[#999]">
-						Built for focus.
+					
+					<div className="pt-16 border-t border-black/10 flex flex-col md:flex-row items-center justify-between gap-8">
+						<div className="flex flex-col gap-2">
+							<p className="text-[10px] font-black text-textMain/40 uppercase tracking-[0.2em]">© {new Date().getFullYear()} CollabLearn. High-Performance Study.</p>
+						</div>
+						<div className="flex items-center gap-12">
+							<Link href="#" className="text-[10px] font-black text-textMain/40 uppercase tracking-widest hover:text-black">Privacy</Link>
+							<Link href="#" className="text-[10px] font-black text-textMain/40 uppercase tracking-widest hover:text-black">Terms</Link>
+							<div className="text-[10px] font-black uppercase tracking-[0.5em] text-neonLime">
+								BUILD_v1.0
+							</div>
+						</div>
 					</div>
 				</div>
 			</footer>
@@ -124,26 +138,36 @@ export default function HomePage() {
 	);
 }
 
-function ReviewCard({ name, role, quote, color }: { name: string, role: string, quote: string, color: string }) {
+function ReviewCard({ name, role, quote, color, dark = false }: { name: string, role: string, quote: string, color: string, dark?: boolean }) {
 	return (
-		<div className={`p-8 border-[3px] border-borderMain shadow-brutal hover:shadow-brutalHover hover:-translate-x-1 hover:-translate-y-1 transition-all ${color} h-full flex flex-col`}>
-			<p className="text-lg font-bold leading-tight mb-6 flex-1 italic">"{quote}"</p>
+		<div className={`p-16 rounded-[4rem] transition-all duration-700 ${color} ${dark ? 'text-white' : 'text-deepInk'} shadow-soft hover:shadow-max group cursor-default h-full flex flex-col justify-between`}>
 			<div>
-				<h4 className="font-black uppercase tracking-tight text-sm">{name}</h4>
-				<p className="text-xs font-bold opacity-70 tracking-wide">{role}</p>
+				<div className={`text-6xl font-black mb-12 opacity-20 ${dark ? 'text-white' : 'text-black'}`}>“</div>
+				<p className="text-3xl font-black leading-[1.1] mb-16 tracking-tighter uppercase italic">{quote}</p>
+			</div>
+			<div className="pt-8 border-t border-current/10">
+				<h4 className="font-black uppercase tracking-widest text-sm mb-2">{name}</h4>
+				<p className="text-[10px] font-bold opacity-60 uppercase tracking-widest">{role}</p>
 			</div>
 		</div>
 	);
 }
 
-function FeatureCard({ icon, title, description }: { icon: React.ReactNode, title: string, description: string }) {
+function FeatureCard({ icon, title, description, index }: { icon: React.ReactNode, title: string, description: string, index: string }) {
 	return (
-		<div className="p-8 border-[3px] border-borderMain bg-white shadow-brutal hover:shadow-brutalHover hover:-translate-x-1 hover:-translate-y-1 transition-all cursor-default h-full">
-			<div className="mb-6 bg-white w-14 h-14 border-[3px] border-borderMain flex items-center justify-center shadow-brutal group-hover:shadow-none">
-				{icon}
+		<div className="p-20 bg-white group hover:bg-neonLime transition-all duration-700 cursor-default border-r border-black/5 last:border-r-0">
+			<div className="flex justify-between items-start mb-24">
+				<div className="w-20 h-20 rounded-[2rem] bg-black/5 flex items-center justify-center group-hover:bg-black transition-all">
+					<div className="group-hover:text-neonLime transition-colors">
+						{icon}
+					</div>
+				</div>
+				<div className="text-xs font-black tracking-[0.5em] text-black/10 group-hover:text-black transition-colors">
+					{index}
+				</div>
 			</div>
-			<h3 className="font-black text-textMain text-xl mb-3 uppercase tracking-tight">{title}</h3>
-			<p className="text-textMuted leading-relaxed font-medium">{description}</p>
+			<h3 className="font-black text-textMain text-4xl mb-6 uppercase tracking-tighter leading-none">{title}</h3>
+			<p className="text-textMain/60 leading-relaxed font-bold uppercase text-xs tracking-widest group-hover:text-black transition-colors">{description}</p>
 		</div>
 	);
 }

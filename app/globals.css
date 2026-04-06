@@ -2,32 +2,38 @@
 @tailwind components;
 @tailwind utilities;
 
-html, body {
-	height: 100%;
-}
+@layer base {
+	html, body {
+		height: 100%;
+	}
 
-body {
-	@apply bg-bg text-textMain antialiased selection:bg-accentBlue selection:text-black;
-	font-family: var(--font-roboto), sans-serif;
+	body {
+		@apply bg-bg text-textMain antialiased;
+		font-family: var(--font-roboto), sans-serif;
+	}
+
+	::selection {
+		@apply bg-neonLime text-deepInk;
+	}
 }
 
 h1, h2, h3, h4, h5, h6 {
-	@apply font-poppins font-bold text-textMain tracking-tight;
+	@apply font-poppins font-black text-textMain tracking-tighter leading-none uppercase;
 }
 
-/* Neo-Brutalist Card */
+/* Minimalist Maximalist Card */
 .card {
-	@apply bg-surface border-[3px] border-borderMain shadow-brutal rounded-none transition-transform;
+	@apply bg-white border border-black/5 shadow-soft hover:shadow-max transition-all duration-500 rounded-2xl;
 }
 
 .focus-ring {
-	@apply focus:outline-none focus-visible:ring-4 focus-visible:ring-accentYellow focus-visible:ring-offset-2 focus-visible:ring-offset-bg;
+	@apply focus:outline-none focus-visible:ring-4 focus-visible:ring-neonLime focus-visible:ring-offset-2 focus-visible:ring-offset-bg;
 }
 
 a {
-	@apply text-inherit hover:underline decoration-2 underline-offset-4 decoration-accentBlue transition-colors;
+	@apply text-inherit transition-all duration-300 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-neonLime hover:after:w-full hover:no-underline after:transition-all after:duration-300;
 }
 
 input, textarea, select {
-	@apply bg-surface border-[3px] border-borderMain shadow-brutal focus:shadow-brutalHover focus:translate-x-[2px] focus:translate-y-[2px] rounded-none px-4 py-3 text-textMain placeholder-gray-500 font-roboto font-medium transition-all focus-ring;
+	@apply bg-surface border-[2px] border-black/10 focus:border-neonLime rounded-xl px-4 py-3 text-textMain placeholder-gray-400 font-roboto font-medium transition-all focus-ring;
 }

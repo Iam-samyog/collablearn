@@ -14,19 +14,19 @@ type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 };
 
 export function Button({ className, variant = 'primary', size = 'md', ...props }: ButtonProps) {
-	const base = 'inline-flex items-center justify-center font-bold font-poppins uppercase tracking-wider border-[3px] border-borderMain shadow-brutal hover:shadow-brutalHover hover:translate-x-[2px] hover:translate-y-[2px] rounded-none transition-all focus-ring active:shadow-none active:translate-x-[4px] active:translate-y-[4px]';
+	const base = 'inline-flex items-center justify-center font-black font-poppins uppercase tracking-widest border border-black/5 shadow-soft hover:shadow-max hover:scale-[1.02] active:scale-[0.98] rounded-full transition-all duration-300 focus-ring';
 	
 	const variants = {
-		primary: 'bg-textMain text-white border-textMain outline-none shadow-brutal',
-		secondary: 'bg-white text-textMain',
-		accent: 'bg-accentYellow text-textMain',
-		ghost: 'border-transparent shadow-none hover:shadow-none hover:translate-x-0 hover:translate-y-0 hover:bg-gray-100 hover:border-transparent active:translate-x-0 active:translate-y-0 text-textMain'
+		primary: 'bg-deepInk text-white border-transparent',
+		secondary: 'bg-white text-deepInk border-black/5',
+		accent: 'bg-neonLime text-deepInk border-transparent',
+		ghost: 'border-transparent shadow-none hover:shadow-none hover:bg-black/5 active:translate-x-0 active:translate-y-0 text-textMain'
 	};
 	
 	const sizes = {
-		sm: 'px-4 py-1.5 text-xs',
-		md: 'px-6 py-2.5 text-sm',
-		lg: 'px-8 py-4 text-base'
+		sm: 'px-6 py-2 text-[10px]',
+		md: 'px-8 py-3 text-xs',
+		lg: 'px-10 py-5 text-sm'
 	};
 	
 	return (
