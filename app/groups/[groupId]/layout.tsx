@@ -25,59 +25,57 @@ export default function GroupLayout({ children, params }: { children: React.Reac
 			</div>
 
 			<div className="flex-1 flex flex-col md:flex-row min-h-0 relative z-10">
-				{/* Minimalist Maximalist Sidebar */}
-				<aside className="w-full md:w-80 flex-shrink-0 p-12 flex flex-col h-fit md:h-full overflow-y-auto border-r border-black/5 bg-white/50 backdrop-blur-sm">
-					<div className="mb-16 flex flex-col gap-4">
-						<Link href="/" className="text-3xl font-poppins font-black uppercase tracking-tighter text-deepInk">
-							COLLAB<span className="text-neonLime">LEARN.</span>
+				{/* High-Saturation Neon Sidebar */}
+				<aside className="w-full md:w-80 flex-shrink-0 p-12 flex flex-col h-fit md:h-full overflow-y-auto border-r border-deepInk/10 bg-neonLime">
+					<div className="mb-20 flex flex-col gap-4">
+						<Link href="/" className="text-4xl font-poppins font-black uppercase tracking-tighter text-deepInk">
+							COLLABLEARN.
 						</Link>
-						<p className="text-[10px] font-bold text-deepInk/30 uppercase tracking-[0.3em]">Workspace v1.0</p>
 					</div>
 					
-					<div className="flex-1 flex flex-col gap-4">
-						<h3 className="text-[10px] font-black uppercase tracking-[0.5em] text-deepInk/20 mb-4">Navigation</h3>
+					<div className="flex-1 flex flex-col gap-6">
 						{links.map((link) => {
 							const isActive = pathname === link.href || (link.name !== 'Chat' && pathname?.includes(link.href));
 							return (
 								<Link 
 									key={link.name} 
 									href={link.href}
-									className={`group flex items-center justify-between px-2 py-3 transition-all duration-300 ${
+									className={`group flex items-center justify-between px-2 py-4 transition-all duration-300 ${
 										isActive 
-											? 'text-deepInk translate-x-2' 
-											: 'text-deepInk/40 hover:text-deepInk hover:translate-x-2'
+											? 'text-deepInk translate-x-4' 
+											: 'text-deepInk/40 hover:text-deepInk hover:translate-x-4'
 									}`}
 								>
-									<span className="text-xs font-black uppercase tracking-[0.2em]">{link.name}</span>
-									<div className={`w-2 h-2 rounded-full transition-all duration-500 ${isActive ? 'bg-neonLime scale-150' : 'bg-transparent group-hover:bg-neonLime/30'}`}></div>
+									<span className="text-lg font-poppins font-black uppercase tracking-[0.1em] leading-none">{link.name}</span>
+									<div className={`w-3 h-3 rounded-full transition-all duration-500 ${isActive ? 'bg-deepInk scale-150' : 'bg-transparent group-hover:bg-deepInk/30'}`}></div>
 								</Link>
 							);
 						})}
 					</div>
 
-					<div className="mt-20 flex flex-col gap-8 border-t border-black/5 pt-12">
+					<div className="mt-20 flex flex-col gap-8 border-t border-deepInk/10 pt-12">
 						<div className="flex items-center gap-4 group">
-							<div className="w-10 h-10 rounded-full bg-softBlush flex items-center justify-center font-black text-xs text-deepInk shadow-soft">
+							<div className="w-10 h-10 rounded-full bg-white flex items-center justify-center font-poppins font-black text-xs text-deepInk shadow-soft">
 								{user?.displayName?.[0] || user?.email?.[0] || 'U'}
 							</div>
 							<div className="flex flex-col">
-								<span className="text-[10px] font-black uppercase tracking-widest text-deepInk truncate max-w-[120px]">
+								<span className="text-[10px] font-poppins font-black uppercase tracking-widest text-deepInk truncate max-w-[120px]">
 									{user?.displayName || user?.email?.split('@')[0] || 'User'}
 								</span>
-								<span className="text-[8px] font-bold text-deepInk/30 uppercase tracking-widest">Active Now</span>
+								<span className="text-[8px] font-poppins font-bold text-deepInk/40 uppercase tracking-widest">Active Now</span>
 							</div>
 						</div>
 						
 						<div className="flex flex-col gap-2">
 							<Link 
 								href="/groups"
-								className="text-[10px] font-black uppercase tracking-[0.2em] text-deepInk/40 hover:text-deepInk transition-colors"
+								className="text-[10px] font-poppins font-black uppercase tracking-[0.2em] text-deepInk/60 hover:text-deepInk transition-colors"
 							>
 								Back to Dashboard
 							</Link>
 							<button 
 								onClick={() => logout()}
-								className="text-left text-[10px] font-black uppercase tracking-[0.2em] text-red-400 hover:text-red-600 transition-colors"
+								className="text-left text-[10px] font-poppins font-black uppercase tracking-[0.2em] text-deepInk/60 hover:text-red-600 transition-colors"
 							>
 								Terminate Session
 							</button>
