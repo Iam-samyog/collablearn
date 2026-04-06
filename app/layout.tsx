@@ -17,6 +17,8 @@ const roboto = Roboto({
 	variable: '--font-roboto',
 });
 
+import { GlobalNavbar } from '@/components/layout/GlobalNavbar';
+
 export const metadata: Metadata = {
 	title: 'Collablearn',
 	description: 'Minimal, AI-powered online learning platform'
@@ -28,6 +30,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 			<body className="font-roboto tracking-wide bg-bg text-textMain min-h-dvh flex flex-col">
 				<AuthProvider>
 					<div className="min-h-dvh flex flex-col">
+						<GlobalNavbar />
 						<main className="flex-1 w-full h-full flex flex-col">
 							{children}
 						</main>

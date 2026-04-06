@@ -1,28 +1,12 @@
 import Link from 'next/link';
 import { ArrowRight, BookOpen, MessageSquare, MonitorPlay, PencilRuler } from 'lucide-react';
+import { BackgroundTypewriter } from '@/components/ui/BackgroundTypewriter';
 
 export default function HomePage() {
 	return (
-		<div className="flex flex-col min-h-screen">
-			{/* Notion-style minimal Navbar */}
-			<header className="sticky top-0 z-50 bg-bg/80 backdrop-blur-md border-b border-borderMuted">
-				<div className="max-w-[1200px] mx-auto px-4 h-14 flex items-center justify-between">
-					<div className="flex items-center gap-2 font-semibold">
-						<BookOpen className="w-5 h-5" />
-						<span>CollabLearn</span>
-					</div>
-					<nav className="flex items-center gap-4 text-sm font-medium">
-						<Link href="/login" className="text-textMuted hover:text-textMain transition">
-							Log in
-						</Link>
-						<Link href="/signup" className="primary px-3 py-1.5 rounded-[4px] bg-textMain text-white hover:bg-[#202020] transition">
-							Get CollabLearn free
-						</Link>
-					</nav>
-				</div>
-			</header>
-
-			<main className="flex-1 w-full max-w-[1200px] mx-auto px-4">
+		<div className="flex flex-col min-h-screen relative overflow-hidden z-0">
+			<BackgroundTypewriter />
+			<main className="flex-1 w-full max-w-[1200px] mx-auto px-4 mt-8">
 				{/* Hero Section */}
 				<section className="pt-32 pb-24 text-center max-w-[800px] mx-auto">
 					<h1 className="text-5xl md:text-7xl font-bold tracking-tight text-textMain mb-6">
