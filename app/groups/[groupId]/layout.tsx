@@ -18,64 +18,75 @@ export default function GroupLayout({ children, params }: { children: React.Reac
 	];
 
 	return (
-		<div className="bg-gray-200 w-full px-4 py-4 md:px-6 flex flex-col flex-1 h-full">
-			<GroupTopBar groupId={groupId} />
-			
-			<div className="mt-4 flex-1 flex flex-col md:flex-row gap-6 min-h-0">
-				{/* Sidebar */}
-				<aside className="w-full md:w-64 flex-shrink-0 card bg-accentBlue p-4 flex flex-col h-fit md:h-full overflow-y-auto">
-					<div className="mb-6 flex flex-col gap-4">
-						<Link href="/" className="text-2xl font-poppins font-bold tracking-tight uppercase">
-							<span className="text-textMain">Collab</span>
-							<span className="text-white">Learn</span>
+		<div className="bg-white w-full flex flex-col flex-1 h-full min-h-screen relative overflow-hidden">
+			{/* Decorative Backdrop */}
+			<div className="absolute top-0 left-0 text-[20vw] font-black uppercase text-black/[0.01] select-none pointer-events-none -translate-x-1/4 leading-none">
+				HUB
+			</div>
+
+			<div className="flex-1 flex flex-col md:flex-row min-h-0 relative z-10">
+				{/* Minimalist Maximalist Sidebar */}
+				<aside className="w-full md:w-80 flex-shrink-0 p-12 flex flex-col h-fit md:h-full overflow-y-auto border-r border-black/5 bg-white/50 backdrop-blur-sm">
+					<div className="mb-16 flex flex-col gap-4">
+						<Link href="/" className="text-3xl font-poppins font-black uppercase tracking-tighter text-deepInk">
+							COLLAB<span className="text-neonLime">LEARN.</span>
 						</Link>
+						<p className="text-[10px] font-bold text-deepInk/30 uppercase tracking-[0.3em]">Workspace v1.0</p>
 					</div>
 					
-					<div className="flex-1 flex flex-col gap-2">
-						<h3 className="font-poppins font-bold text-sm tracking-wider uppercase text-textMain mb-2 px-2">Navigation</h3>
+					<div className="flex-1 flex flex-col gap-4">
+						<h3 className="text-[10px] font-black uppercase tracking-[0.5em] text-deepInk/20 mb-4">Navigation</h3>
 						{links.map((link) => {
 							const isActive = pathname === link.href || (link.name !== 'Chat' && pathname?.includes(link.href));
 							return (
 								<Link 
 									key={link.name} 
 									href={link.href}
-									className={`px-4 py-3 font-poppins font-bold uppercase transition-all ${
+									className={`group flex items-center justify-between px-2 py-3 transition-all duration-300 ${
 										isActive 
-											? 'bg-accentYellow border-[3px] border-borderMain shadow-brutal translate-x-[2px] translate-y-[2px]' 
-											: 'border-[3px] border-transparent hover:border-borderMain hover:bg-white hover:shadow-brutalHover hover:translate-y-[2px] hover:translate-x-[2px]'
+											? 'text-deepInk translate-x-2' 
+											: 'text-deepInk/40 hover:text-deepInk hover:translate-x-2'
 									}`}
 								>
-									{link.name}
+									<span className="text-xs font-black uppercase tracking-[0.2em]">{link.name}</span>
+									<div className={`w-2 h-2 rounded-full transition-all duration-500 ${isActive ? 'bg-neonLime scale-150' : 'bg-transparent group-hover:bg-neonLime/30'}`}></div>
 								</Link>
 							);
 						})}
 					</div>
 
-					<div className="mt-8 flex flex-col gap-2 border-t-[3px] border-borderMain pt-4">
-						<h3 className="font-poppins font-bold text-sm tracking-wider uppercase text-textMain mb-1 px-2">Account</h3>
-						
-						<div className="px-4 py-3 font-poppins font-bold uppercase bg-white border-[3px] border-borderMain text-xs truncate">
-							{user?.displayName || user?.email || 'User'}
+					<div className="mt-20 flex flex-col gap-8 border-t border-black/5 pt-12">
+						<div className="flex items-center gap-4 group">
+							<div className="w-10 h-10 rounded-full bg-softBlush flex items-center justify-center font-black text-xs text-deepInk shadow-soft">
+								{user?.displayName?.[0] || user?.email?.[0] || 'U'}
+							</div>
+							<div className="flex flex-col">
+								<span className="text-[10px] font-black uppercase tracking-widest text-deepInk truncate max-w-[120px]">
+									{user?.displayName || user?.email?.split('@')[0] || 'User'}
+								</span>
+								<span className="text-[8px] font-bold text-deepInk/30 uppercase tracking-widest">Active Now</span>
+							</div>
 						</div>
 						
-						<Link 
-							href="/groups"
-							className="px-4 py-3 font-poppins font-bold uppercase transition-all border-[3px] border-transparent hover:border-borderMain hover:bg-white hover:shadow-brutalHover hover:translate-y-[2px] hover:translate-x-[2px]"
-						>
-							All Groups
-						</Link>
-						
-						<button 
-							onClick={() => logout()}
-							className="text-left px-4 py-3 font-poppins font-bold uppercase transition-all border-[3px] border-transparent hover:border-black hover:bg-red-500 hover:text-white hover:shadow-brutalHover hover:translate-y-[2px] hover:translate-x-[2px]"
-						>
-							Logout
-						</button>
+						<div className="flex flex-col gap-2">
+							<Link 
+								href="/groups"
+								className="text-[10px] font-black uppercase tracking-[0.2em] text-deepInk/40 hover:text-deepInk transition-colors"
+							>
+								Back to Dashboard
+							</Link>
+							<button 
+								onClick={() => logout()}
+								className="text-left text-[10px] font-black uppercase tracking-[0.2em] text-red-400 hover:text-red-600 transition-colors"
+							>
+								Terminate Session
+							</button>
+						</div>
 					</div>
 				</aside>
 
 				{/* Main Content Area */}
-				<main className="flex-1 min-w-0 h-full overflow-hidden">
+				<main className="flex-1 min-w-0 h-full overflow-hidden bg-white">
 					{children}
 				</main>
 			</div>

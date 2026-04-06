@@ -243,144 +243,15 @@ export default function BoardPage({ params }: { params: { groupId: string } }) {
 
 	return (
 		<RequireAuth>
-			<div className="flex flex-col h-full w-full card bg-bg relative">
-				{/* Neo-brutalist Toolbar Main Row */}
-				<div className="px-4 py-2 border-b-[3px] border-borderMain bg-white flex flex-col xl:flex-row xl:items-center justify-between gap-4 z-20 shrink-0 relative">
-					
-					<div className="flex items-center gap-6 overflow-x-auto py-2 px-1 custom-scrollbar w-full xl:w-auto">
-						{/* Core Tools Section */}
-						<div className="flex items-center gap-2 shrink-0">
-							<button 
-								onClick={() => setActiveTool('pen')}
-								className={`flex items-center gap-2 px-3 py-2 border-[3px] border-borderMain font-bold uppercase transition-all ${
-									activeTool === 'pen' ? 'bg-accentBlue shadow-brutal translate-x-[2px] translate-y-[2px]' : 'hover:bg-gray-100 hover:shadow-brutalHover hover:-translate-x-[1px] hover:-translate-y-[1px]'
-								}`}
-							>
-								<PenTool className="w-4 h-4" /> Pen
-							</button>
-							<button 
-								onClick={() => setActiveTool('pan')}
-								className={`flex items-center gap-2 px-3 py-2 border-[3px] border-borderMain font-bold uppercase transition-all ${
-									activeTool === 'pan' ? 'bg-accentPink shadow-brutal translate-x-[2px] translate-y-[2px]' : 'hover:bg-gray-100 hover:shadow-brutalHover hover:-translate-x-[1px] hover:-translate-y-[1px]'
-								}`}
-							>
-								<Hand className="w-4 h-4" /> Pan
-							</button>
-							<button 
-								onClick={() => setActiveTool('eraser')}
-								className={`flex items-center gap-2 px-3 py-2 border-[3px] border-borderMain font-bold uppercase transition-all ${
-									activeTool === 'eraser' ? 'bg-accentYellow shadow-brutal translate-x-[2px] translate-y-[2px]' : 'hover:bg-gray-100 hover:shadow-brutalHover hover:-translate-x-[1px] hover:-translate-y-[1px]'
-								}`}
-							>
-								<Eraser className="w-4 h-4" /> Eraser
-							</button>
-						</div>
-
-						{/* Thickness */}
-						<div className="flex items-center gap-2 border-l-[3px] border-borderMain pl-6 shrink-0">
-							{THICKNESS.map((t) => (
-								<button
-									key={t.name}
-									onClick={() => setWidth(t.value)}
-									className={`px-3 py-2 border-[3px] border-borderMain font-bold uppercase text-xs transition-all ${
-										width === t.value && activeTool === 'pen' ? 'bg-black text-white shadow-brutal translate-x-[2px] translate-y-[2px]' : 'bg-white hover:bg-gray-100 hover:shadow-brutalHover hover:-translate-x-[1px] hover:-translate-y-[1px]'
-									}`}
-								>
-									{t.name}
-								</button>
-							))}
-						</div>
-
-						{/* Colors */}
-						<div className={`flex items-center flex-wrap gap-2 border-l-[3px] border-borderMain pl-6 shrink-0 ${activeTool === 'eraser' ? 'opacity-30 pointer-events-none' : ''}`}>
-							{COLORS.map((c) => {
-								const isActive = color === c.hex;
-								return (
-									<button
-										key={c.name}
-										onClick={() => setColor(c.hex)}
-										style={{ backgroundColor: c.hex }}
-										className={`relative w-8 h-8 flex items-center justify-center border-[3px] border-borderMain transition-all duration-200 ${
-											isActive ? 'rounded-lg scale-110 shadow-brutal translate-x-[1px] translate-y-[1px]' : 'rounded-full hover:scale-110'
-										}`}
-										title={c.name}
-									>
-										{isActive && (
-											<Check strokeWidth={4} className={`w-4 h-4 ${c.hex === '#FFFFFF' || c.hex === '#FFE347' ? 'text-black' : 'text-white'}`} />
-										)}
-									</button>
-								);
-							})}
-						</div>
-					</div>
-
-					{/* Right Side Toggles */}
-					<div className="flex items-center justify-end gap-3 shrink-0">
-						{/* Expand Toggle */}
-						<button 
-							onClick={() => setIsExpanded(!isExpanded)}
-							className={`flex items-center justify-center p-2 border-[3px] border-borderMain font-bold uppercase transition-all ${
-								isExpanded ? 'bg-black text-white hover:bg-black translate-x-[2px] translate-y-[2px] shadow-sm' : 'bg-white shadow-brutal hover:-translate-x-[1px] hover:-translate-y-[1px]'
-							}`}
-							title="Zoom Controls"
-						>
-							<div className="flex items-center gap-1">
-								<div className="w-1.5 h-1.5 rounded-full bg-current"></div>
-								<div className="w-1.5 h-1.5 rounded-full bg-current"></div>
-								<div className="w-1.5 h-1.5 rounded-full bg-current"></div>
-							</div>
-						</button>
-
-						{/* Global Clear Board */}
-						<button 
-							onClick={clearBoard}
-							disabled={clearing}
-							className="hidden md:flex items-center justify-center gap-2 px-4 py-2 border-[3px] border-borderMain font-bold uppercase bg-red-400 hover:bg-red-500 text-white transition-all hover:shadow-brutalHover shrink-0"
-						>
-							<Trash2 className="w-4 h-4" /> {clearing ? "..." : "Clear"}
-						</button>
-					</div>
-
+			<div className="flex flex-col h-full w-full bg-white relative overflow-hidden">
+				{/* Maximalist Background Texture */}
+				<div className="absolute top-0 left-0 text-[35vw] font-black uppercase text-black/[0.02] select-none pointer-events-none -translate-x-1/4 -translate-y-1/4 leading-none">
+					DRAFT
 				</div>
-				
-				{/* Expanded Options Drawer (Zoom & Mobile Actions) */}
-				<div 
-					className={`bg-gray-50 border-b-[3px] border-borderMain transition-all overflow-hidden relative z-10 ${
-						isExpanded ? 'max-h-[500px] border-b-[3px]' : 'max-h-0 border-b-0'
-					}`}
-				>
-					<div className="p-4 flex flex-wrap items-center gap-6">
-						{/* Zoom Controls */}
-						<div className="flex flex-col gap-2 shrink-0">
-							<span className="text-xs font-bold uppercase tracking-wider text-textMuted/50 px-1">Zoom View</span>
-							<div className="flex items-center gap-1 bg-white p-1 border-[3px] border-borderMain rounded-md shadow-brutal">
-								<button onClick={() => performZoom(-1)} className="p-2 border-[3px] border-transparent hover:border-borderMain hover:bg-gray-100 transition-all rounded-md" title="Zoom Out">
-									<ZoomOut className="w-4 h-4" />
-								</button>
-								<div className="w-12 text-center text-xs font-bold font-poppins">{Math.round(zoom * 100)}%</div>
-								<button onClick={() => performZoom(1)} className="p-2 border-[3px] border-transparent hover:border-borderMain hover:bg-gray-100 transition-all rounded-md" title="Zoom In">
-									<ZoomIn className="w-4 h-4" />
-								</button>
-								<button onClick={resetViewport} className="p-2 border-[3px] border-transparent border-l-borderMain rounded-none hover:bg-gray-100 transition-all ml-1" title="Reset Viewport">
-									<Maximize className="w-4 h-4" />
-								</button>
-							</div>
-						</div>
 
-						{/* Mobile Clear Board (Hidden on Desktop) */}
-						<button 
-							onClick={clearBoard}
-							disabled={clearing}
-							className="md:hidden flex items-center justify-center gap-2 w-full mt-2 px-4 py-3 border-[3px] border-borderMain font-bold uppercase bg-red-400 hover:bg-red-500 text-white transition-all hover:shadow-brutalHover shrink-0"
-						>
-							<Trash2 className="w-4 h-4" /> {clearing ? "..." : "Clear Board"}
-						</button>
-					</div>
-				</div>
-				
 				{/* Canvas Workspace */}
 				<div 
-					className={`flex-1 bg-surface relative overflow-hidden group touch-none select-none ${activeTool === 'pan' ? 'cursor-grab active:cursor-grabbing' : 'cursor-crosshair'}`}
+					className={`flex-1 bg-white relative overflow-hidden group touch-none select-none z-10 ${activeTool === 'pan' ? 'cursor-grab active:cursor-grabbing' : 'cursor-crosshair'}`}
 					tabIndex={0}
 				>
 					<svg
@@ -417,7 +288,122 @@ export default function BoardPage({ params }: { params: { groupId: string } }) {
 						)}
 					</svg>
 				</div>
+
+				{/* Floating Minimal-Max Toolbar Island */}
+				<div className="fixed bottom-12 left-0 right-0 flex justify-center z-50 pointer-events-none px-6">
+					<div className="bg-white/80 backdrop-blur-3xl border border-white/20 shadow-max rounded-[3rem] px-8 py-5 flex flex-wrap items-center gap-8 pointer-events-auto max-w-[1400px]">
+						
+						{/* Core Tools */}
+						<div className="flex items-center gap-4">
+							<ToolButton 
+								active={activeTool === 'pen'} 
+								onClick={() => setActiveTool('pen')}
+								label="PEN"
+								icon={<PenTool className="w-5 h-5" />}
+								color="bg-neonLime"
+							/>
+							<ToolButton 
+								active={activeTool === 'pan'} 
+								onClick={() => setActiveTool('pan')}
+								label="MOVE"
+								icon={<Hand className="w-5 h-5" />}
+								color="bg-softBlush"
+							/>
+							<ToolButton 
+								active={activeTool === 'eraser'} 
+								onClick={() => setActiveTool('eraser')}
+								label="ERASE"
+								icon={<Eraser className="w-5 h-5" />}
+								color="bg-red-500"
+							/>
+						</div>
+
+						<div className="w-[1px] h-10 bg-black/10 mx-2"></div>
+
+						{/* Thickness */}
+						<div className="flex items-center gap-3">
+							{THICKNESS.map((t) => (
+								<button
+									key={t.name}
+									onClick={() => setWidth(t.value)}
+									className={`text-[8px] font-black uppercase tracking-[0.3em] px-4 py-2 rounded-full transition-all ${
+										width === t.value && activeTool === 'pen' ? 'bg-deepInk text-white' : 'hover:bg-black/5 text-deepInk/40'
+									}`}
+								>
+									{t.name}
+								</button>
+							))}
+						</div>
+
+						<div className="w-[1px] h-10 bg-black/10 mx-2"></div>
+
+						{/* Colors */}
+						<div className={`flex items-center gap-3 ${activeTool === 'eraser' ? 'opacity-20 pointer-events-none' : ''}`}>
+							{COLORS.map((c) => (
+								<button
+									key={c.name}
+									onClick={() => setColor(c.hex)}
+									style={{ backgroundColor: c.hex }}
+									className={`w-8 h-8 rounded-full border border-black/5 transition-all duration-300 hover:scale-125 ${
+										color === c.hex ? 'ring-4 ring-neonLime scale-110 shadow-soft' : ''
+									}`}
+									title={c.name}
+								/>
+							))}
+						</div>
+
+						<div className="w-[1px] h-10 bg-black/10 mx-2"></div>
+
+						{/* Action Buttons */}
+						<div className="flex items-center gap-4">
+							<button 
+								onClick={() => setIsExpanded(!isExpanded)}
+								className={`w-12 h-12 rounded-full flex items-center justify-center transition-all ${isExpanded ? 'bg-neonLime text-deepInk rotate-180' : 'bg-black/5 text-deepInk hover:bg-black/10'}`}
+							>
+								<Maximize className="w-4 h-4" />
+							</button>
+							<button 
+								onClick={clearBoard}
+								disabled={clearing}
+								className="w-12 h-12 rounded-full bg-red-50 text-red-500 flex items-center justify-center hover:bg-red-500 hover:text-white transition-all"
+							>
+								<Trash2 className="w-4 h-4" />
+							</button>
+						</div>
+					</div>
+				</div>
+
+				{/* Floating Zoom Controls (Bottom Right) */}
+				<div 
+					className={`fixed bottom-12 right-12 flex flex-col gap-4 z-50 transition-all duration-700 ${isExpanded ? 'translate-y-0 opacity-100' : 'translate-y-24 opacity-0 pointer-events-none'}`}
+				>
+					<div className="bg-white/80 backdrop-blur-xl border border-white/20 shadow-max rounded-[2rem] p-3 flex flex-col gap-2">
+						<button onClick={() => performZoom(1)} className="w-12 h-12 rounded-2xl bg-black/5 flex items-center justify-center hover:bg-neonLime transition-all">
+							<ZoomIn className="w-4 h-4" />
+						</button>
+						<div className="text-[10px] font-black text-center font-poppins">{Math.round(zoom * 100)}%</div>
+						<button onClick={() => performZoom(-1)} className="w-12 h-12 rounded-2xl bg-black/5 flex items-center justify-center hover:bg-neonLime transition-all">
+							<ZoomOut className="w-4 h-4" />
+						</button>
+					</div>
+				</div>
 			</div>
 		</RequireAuth>
+	);
+}
+
+function ToolButton({ active, onClick, label, icon, color }: { active: boolean, onClick: () => void, label: string, icon: React.ReactNode, color: string }) {
+	return (
+		<button 
+			onClick={onClick}
+			className={`group flex items-center gap-3 px-6 py-3 rounded-full transition-all duration-300 ${active ? `${color} text-deepInk shadow-soft scale-105` : 'bg-black/5 text-deepInk/40 hover:bg-black/10'}`}
+		>
+			<div className={`${active ? 'text-deepInk' : 'group-hover:text-deepInk'} transition-colors`}>
+				{icon}
+			</div>
+			<span className={`text-[10px] font-black tracking-[0.4em] transition-all ${active ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
+				{label}
+			</span>
+		</button>
 	);
 }
