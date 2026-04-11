@@ -20,6 +20,9 @@ export default function QuizzesPage({ params }: { params: { groupId: string } })
 	const [activeQuiz, setActiveQuiz] = useState<Quiz | null>(null);
 	const [answers, setAnswers] = useState<number[]>([]);
 	const [result, setResult] = useState<number | null>(null);
+	const [creatingQuiz, setCreatingQuiz] = useState(false);
+	const [submittingQuiz, setSubmittingQuiz] = useState(false);
+	const [error, setError] = useState<string | null>(null);
 
 	useEffect(() => {
 		const unsub = onSnapshot(collection(db, 'groups', groupId, 'quizzes'), (snap) => {
@@ -32,21 +35,67 @@ export default function QuizzesPage({ params }: { params: { groupId: string } })
 	}, [db, groupId]);
 
 	async function addQuestion() {
-		if (!newQ.text.trim() || newQ.options.some((o) => !o.trim())) return;
-		setBuilderQs((prev) => [...prev, newQ]);
+		setError(null);
+		if (!newQ.text.trim()) {
+			setError('Question text is required');
+			return;
+		}
+		const filledOptions = newQ.options.filter(o => o.trim() !== '');
+		if (filledOptions.length < 2) {
+			setError('At least 2 options are required');
+			return;
+		}
+		
+		// Clean the question data
+		const cleanedQ = {
+			...newQ,
+			options: filledOptions,
+		};
+
+		setBuilderQs((prev) => [...prev, cleanedQ]);
 		setNewQ({ text: '', options: ['', '', '', ''], correctIndex: 0 });
 	}
 
 	async function createQuiz() {
-		if (!user || !title.trim() || builderQs.length === 0) return;
-		await addDoc(collection(db, 'groups', groupId, 'quizzes'), {
-			title: title.trim(),
-			questions: builderQs,
-			ownerId: user.uid,
-			createdAt: serverTimestamp()
-		});
-		setTitle('');
-		setBuilderQs([]);
+		setError(null);
+		if (!user || !title.trim()) {
+			setError('Quiz title is required');
+			return;
+		}
+
+		let finalQs = [...builderQs];
+		
+		// Auto-add current question if it looks complete
+		const filledOptions = newQ.options.filter(o => o.trim() !== '');
+		if (newQ.text.trim() && filledOptions.length >= 2) {
+			finalQs.push({
+				...newQ,
+				options: filledOptions
+			});
+		}
+
+		if (finalQs.length === 0) {
+			setError('At least one question is required');
+			return;
+		}
+
+		setCreatingQuiz(true);
+		try {
+			await addDoc(collection(db, 'groups', groupId, 'quizzes'), {
+				title: title.trim(),
+				questions: finalQs,
+				ownerId: user.uid,
+				createdAt: serverTimestamp()
+			});
+			setTitle('');
+			setBuilderQs([]);
+			setNewQ({ text: '', options: ['', '', '', ''], correctIndex: 0 });
+		} catch (error) {
+			console.error('Error creating quiz:', error);
+			alert('Failed to create quiz. Please try again.');
+		} finally {
+			setCreatingQuiz(false);
+		}
 	}
 
 	function startQuiz(q: Quiz) {
@@ -57,17 +106,25 @@ export default function QuizzesPage({ params }: { params: { groupId: string } })
 
 	async function submit() {
 		if (!user || !activeQuiz) return;
-		let score = 0;
-		activeQuiz.questions.forEach((q, i) => {
-			if (answers[i] === q.correctIndex) score += 1;
-		});
-		setResult(score);
-		await addDoc(collection(db, 'groups', groupId, 'quizzes', activeQuiz.id, 'submissions'), {
-			uid: user.uid,
-			answers,
-			score,
-			createdAt: serverTimestamp()
-		});
+		setSubmittingQuiz(true);
+		try {
+			let score = 0;
+			activeQuiz.questions.forEach((q, i) => {
+				if (answers[i] === q.correctIndex) score += 1;
+			});
+			setResult(score);
+			await addDoc(collection(db, 'groups', groupId, 'quizzes', activeQuiz.id, 'submissions'), {
+				uid: user.uid,
+				answers,
+				score,
+				createdAt: serverTimestamp()
+			});
+		} catch (error) {
+			console.error('Error submitting quiz:', error);
+			alert('Failed to submit results. Please try again.');
+		} finally {
+			setSubmittingQuiz(false);
+		}
 	}
 
 	return (
@@ -135,13 +192,21 @@ export default function QuizzesPage({ params }: { params: { groupId: string } })
 									<Button variant="secondary" size="md" className="mt-4" onClick={addQuestion}>Add Question</Button>
 								</div>
 								
+								{error && (
+									<div className="bg-red-500/10 border border-red-500/20 rounded-2xl px-6 py-4">
+										<p className="text-[10px] font-black tracking-widest text-red-500 uppercase">{error}</p>
+									</div>
+								)}
+								
 								{builderQs.length > 0 && (
 									<div className="flex items-center justify-between px-2">
 										<span className="text-[8px] font-black tracking-[0.3em] opacity-40">Questions Cached: {builderQs.length}</span>
 										<div className="w-1.5 h-1.5 rounded-full bg-neonLime animate-pulse"></div>
 									</div>
 								)}
-								<Button variant="accent" size="lg" className="w-full py-6 mt-4" onClick={createQuiz} disabled={builderQs.length === 0}>Deploy Quiz</Button>
+								<Button variant="accent" size="lg" className="w-full py-6 mt-4" onClick={createQuiz} disabled={creatingQuiz}>
+									{creatingQuiz ? 'Deploying...' : 'Deploy Quiz'}
+								</Button>
 							</div>
 						</div>
 
@@ -195,7 +260,7 @@ export default function QuizzesPage({ params }: { params: { groupId: string } })
 												</div>
 											))}
 											<div className="flex items-center justify-between pt-8">
-												<Button variant="accent" size="lg" className="px-16" onClick={submit}>Commit Results</Button>
+												<Button variant="accent" size="lg" className="px-16" onClick={submit} disabled={submittingQuiz}>{submittingQuiz ? 'Submitting...' : 'Commit Results'}</Button>
 												{result !== null && (
 													<div className="text-right">
 														<div className="text-xs font-black tracking-[0.3em] text-white/40 mb-1">Final Score</div>

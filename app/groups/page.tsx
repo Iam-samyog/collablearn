@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useAuth } from '@/components/auth/AuthProvider';
 import { RequireAuth } from '@/components/auth/RequireAuth';
 import Link from 'next/link';
+import { Button } from '@/components/ui/Button';
 import type { Group } from '@/lib/types';
 
 type GroupDoc = Omit<Group, 'id' | 'createdAt' | 'updatedAt'> & {
@@ -19,6 +20,7 @@ export default function GroupsPage() {
 	const [name, setName] = useState('');
 	const [isPrivate, setIsPrivate] = useState(false);
 	const [loading, setLoading] = useState(true);
+	const [creating, setCreating] = useState(false);
 
 	useEffect(() => {
 		const q = query(collection(db, 'groups'));
@@ -43,17 +45,25 @@ export default function GroupsPage() {
 
 	async function createGroup(e: React.FormEvent) {
 		e.preventDefault();
-		if (!user) return;
-		await addDoc(collection(db, 'groups'), {
-			name,
-			isPrivate,
-			ownerId: user.uid,
-			memberIds: [user.uid],
-			createdAt: serverTimestamp(),
-			updatedAt: serverTimestamp()
-		});
-		setName('');
-		setIsPrivate(false);
+		if (!user || !name.trim()) return;
+		setCreating(true);
+		try {
+			await addDoc(collection(db, 'groups'), {
+				name: name.trim(),
+				isPrivate,
+				ownerId: user.uid,
+				memberIds: [user.uid],
+				createdAt: serverTimestamp(),
+				updatedAt: serverTimestamp()
+			});
+			setName('');
+			setIsPrivate(false);
+		} catch (error) {
+			console.error('Error creating group:', error);
+			alert('Failed to create group. Please try again.');
+		} finally {
+			setCreating(false);
+		}
 	}
 
 	async function joinGroup(groupId: string) {
@@ -94,9 +104,9 @@ export default function GroupsPage() {
 							/>
 							Private group
 						</label>
-						<button className="primary w-full py-2 rounded-md" disabled={!user}>
-							Create
-						</button>
+						<Button variant="primary" className="w-full" disabled={!user || creating || !name.trim()}>
+							{creating ? 'Creating...' : 'Create Group'}
+						</Button>
 					</form>
 				</div>
 				<div className="md:col-span-2 space-y-3">
@@ -117,9 +127,9 @@ export default function GroupsPage() {
 									Open
 								</Link>
 								{user && !g.memberIds.includes(user.uid) && (
-									<button className="primary px-3 py-2 rounded-md" onClick={() => joinGroup(g.id)}>
+									<Button variant="accent" size="sm" onClick={() => joinGroup(g.id)}>
 										Join
-									</button>
+									</Button>
 								)}
 							</div>
 						</div>

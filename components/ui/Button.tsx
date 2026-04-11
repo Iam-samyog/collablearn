@@ -14,7 +14,7 @@ type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 };
 
 export function Button({ className, variant = 'primary', size = 'md', ...props }: ButtonProps) {
-	const base = 'inline-flex items-center justify-center font-black font-poppins tracking-widest border border-black/5 shadow-soft hover:shadow-max hover:scale-[1.02] active:scale-[0.98] rounded-full transition-all duration-300 focus-ring';
+	const base = 'inline-flex items-center justify-center font-black font-poppins tracking-widest border border-black/5 shadow-soft hover:shadow-max hover:scale-[1.02] active:scale-[0.98] rounded-full transition-all duration-300 focus-ring disabled:opacity-50 disabled:cursor-not-allowed disabled:scale-100 disabled:hover:shadow-soft';
 	
 	const variants = {
 		primary: 'bg-deepInk text-white border-transparent',

@@ -10,14 +10,15 @@ export function UserMenu() {
 		return (
 			<div className="flex items-center gap-3">
 				<Link href="/login">
-					<Button variant="secondary" size="lg" className="shadow-none hover:shadow-brutal hover:-translate-x-0.5 hover:-translate-y-0.5">
+					<span className="inline-flex items-center px-5 py-2.5 rounded-full border-2 border-deepInk text-deepInk text-sm font-poppins font-bold hover:bg-deepInk hover:text-white transition-all duration-300">
 						Login
-					</Button>
+					</span>
 				</Link>
 				<Link href="/signup">
-					<Button variant="accent" size="lg">
+					<span className="inline-flex items-center gap-2 px-6 py-2.5 bg-deepInk text-neonLime text-sm font-poppins font-bold rounded-full hover:scale-105 hover:shadow-xl transition-all duration-300">
 						Sign up
-					</Button>
+						<span className="w-5 h-5 rounded-full bg-neonLime flex items-center justify-center text-deepInk text-xs font-black">→</span>
+					</span>
 				</Link>
 			</div>
 		);
@@ -26,16 +27,29 @@ export function UserMenu() {
 	const display = user.displayName || user.email?.split('@')[0] || 'Member';
 
 	return (
-		<div className="flex items-center gap-6">
-			<div className="flex items-center gap-3 group cursor-default">
-				<div className="w-2 h-2 rounded-full bg-neonLime animate-pulse"></div>
-				<span className="text-[12px] font-black tracking-[0.2em] ">
-					{display}
-				</span>
+		<div className="flex items-center gap-2 bg-deepInk rounded-full pl-1 pr-4 py-1">
+			{/* Avatar */}
+			<div className="relative shrink-0">
+				<div className="w-8 h-8 rounded-full bg-neonLime flex items-center justify-center">
+					<span className="text-deepInk font-poppins font-black text-sm leading-none">
+						{display[0].toUpperCase()}
+					</span>
+				</div>
+				<span className="absolute bottom-0 right-0 w-2 h-2 bg-green-400 border border-deepInk rounded-full"></span>
 			</div>
-			<Button variant="ghost" size="lg" onClick={() => logout()} className="text-[12px] hover:text-black hover:bg-red-500">
-				Sign out
-			</Button>
+
+			{/* Name */}
+			<span className="text-sm font-poppins font-semibold text-white hidden md:block max-w-[100px] truncate px-1">
+				{display}
+			</span>
+
+			{/* Sign out */}
+			<button
+				onClick={() => logout()}
+				className="text-xs font-poppins font-bold text-white/50 hover:text-red-400 transition-colors duration-200 pl-2 border-l border-white/10"
+			>
+				Out
+			</button>
 		</div>
 	);
 }
