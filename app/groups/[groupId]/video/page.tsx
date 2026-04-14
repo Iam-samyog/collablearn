@@ -4,14 +4,14 @@ import { initFirebase } from '@/lib/firebase';
 import { addDoc, collection, doc, onSnapshot, serverTimestamp, setDoc } from 'firebase/firestore';
 import { useAuth } from '@/components/auth/AuthProvider';
 import { RequireAuth } from '@/components/auth/RequireAuth';
-import { Video, VideoOff, Mic, MicOff, MonitorUp, X } from 'lucide-react';
+import { Video, VideoOff, Mic, MicOff, MonitorUp, X, Settings, Check } from 'lucide-react';
 
 type PeerConn = {
 	pc: RTCPeerConnection;
 	stream: MediaStream;
 };
 
-const StreamVideo = ({ stream, name, isLocal, camOn, cameraError }: { stream: MediaStream | null, name: string, isLocal?: boolean, camOn?: boolean, cameraError?: string }) => {
+const StreamVideo = ({ stream, name, isLocal, camOn, cameraError, isScreenSharing }: { stream: MediaStream | null, name: string, isLocal?: boolean, camOn?: boolean, cameraError?: string, isScreenSharing?: boolean }) => {
 	const [isSpeaking, setIsSpeaking] = useState(false);
 	const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -65,13 +65,13 @@ const StreamVideo = ({ stream, name, isLocal, camOn, cameraError }: { stream: Me
 		};
 	}, [stream]);
 
-	const showAsOff = isLocal && !camOn;
+	const showAsOff = isLocal && !camOn && !isScreenSharing;
 
 	return (
 		<div className={`relative rounded-[4rem] min-h-[350px] flex flex-col justify-center overflow-hidden transition-all duration-700 ${isSpeaking ? 'ring-8 ring-neonLime shadow-max scale-[1.02] z-20' : 'border border-black/5 shadow-soft z-10'} ${isLocal ? "bg-softBlush" : "bg-white"}`}>
 			{/* Typographic Label Sticker */}
 			<div className={`absolute top-8 left-8 z-30 px-6 py-2 text-[10px] font-black font-poppins tracking-[0.3em] ${isSpeaking ? 'bg-neonLime text-deepInk' : isLocal ? 'bg-deepInk text-white' : 'bg-white text-deepInk border border-black/5'} shadow-soft`}>
-				{name} {isSpeaking && "/ SPEAKING"}
+				{name} {isSpeaking && "/ SPEAKING"} {isScreenSharing && "/ SCREEN"}
 			</div>
 
 			{isLocal && cameraError && (
@@ -113,6 +113,10 @@ export default function VideoPage({ params }: { params: { groupId: string } }) {
 	const [micOn, setMicOn] = useState(true);
 	const [isScreenSharing, setIsScreenSharing] = useState(false);
 	const [cameraError, setCameraError] = useState<string>('');
+	const [showSettings, setShowSettings] = useState(false);
+	const [devices, setDevices] = useState<MediaDeviceInfo[]>([]);
+	const [selectedCam, setSelectedCam] = useState<string>('');
+	const [selectedMic, setSelectedMic] = useState<string>('');
 	
 	const streamRef = useRef<MediaStream | null>(null);
 	const conns = useRef<Map<string, PeerConn>>(new Map());
@@ -123,8 +127,19 @@ export default function VideoPage({ params }: { params: { groupId: string } }) {
 	useEffect(() => {
 		if (!user) return;
 		let isMounted = true;
+		
+		const loadDevices = async () => {
+			try {
+				const devs = await navigator.mediaDevices.enumerateDevices();
+				if (isMounted) setDevices(devs);
+			} catch (e) {
+				console.error("Device enumeration error:", e);
+			}
+		};
+
 		(async () => {
 			try {
+				await loadDevices();
 				const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
 				
 				// CRITICAL FIX: React 18 Strict Mode mounts twice in development.
@@ -258,37 +273,29 @@ export default function VideoPage({ params }: { params: { groupId: string } }) {
 		if (!localStream) return;
 		
 		if (camOn) {
-			// HARDWARE WIPE: Fully destroy the native browser video tracks to kill the webcam completely
 			localStream.getVideoTracks().forEach((t) => {
 				t.stop();
 				localStream.removeTrack(t);
 			});
 			
-			// Disconnect the outbound pipeline so the browser entirely unbinds from hardware
 			conns.current.forEach(({ pc }) => {
-				const videoSender = pc.getSenders().find((s) => s.track && s.track.kind === 'video');
-				if (videoSender && !isScreenSharing) {
-					videoSender.replaceTrack(null);
+				const sender = pc.getSenders().find(s => s.track?.kind === 'video') || pc.getSenders().find(s => !s.track && s.dtlsTransport); // dtlsTransport check helps identify active senders
+				if (sender && !isScreenSharing) {
+					sender.replaceTrack(null);
 				}
 			});
 			
 			setCamOn(false);
 		} else {
 			try {
-				// Re-boot hardware from scratch natively
-				const newStream = await navigator.mediaDevices.getUserMedia({ video: true });
+				const constraints = { video: selectedCam ? { deviceId: { exact: selectedCam } } : true };
+				const newStream = await navigator.mediaDevices.getUserMedia(constraints);
 				const newTrack = newStream.getVideoTracks()[0];
 				
 				if (newTrack) {
 					localStream.addTrack(newTrack);
-					
-					// Rehydrate the actual WebRTC TCP streams if we are NOT currently screen sharing
 					conns.current.forEach(({ pc }) => {
-						// Look for the sender that currently has NO track (since we replaced it with null) or the stopped track
-						// Luckily, `getSenders()` returns a list matching the original tracks. If it's null, we might not know it was 'video'.
-						// Typically, we only have 1 audio and 1 video sender. We'll identify it directly:
 						const senders = pc.getSenders();
-						// The audio sender exists. The other sender is the video one.
 						const videoSender = senders.find(s => s.track?.kind === 'video') || senders.find(s => !s.track);
 						
 						if (videoSender && !isScreenSharing) {
@@ -296,12 +303,66 @@ export default function VideoPage({ params }: { params: { groupId: string } }) {
 						}
 					});
 					setCamOn(true);
-					setCameraError(''); // Clear any lingering errors since it booted successfully
+					setCameraError('');
 				}
 			} catch (e: any) {
-				console.error("Camera hardware re-initialization failed:", e);
+				console.error("Camera re-initialization failed:", e);
 				setCameraError(e.message || "Failed to boot camera hardware");
 			}
+		}
+	}
+	
+	async function switchCamera(deviceId: string) {
+		setSelectedCam(deviceId);
+		if (!camOn) return;
+		
+		try {
+			const newStream = await navigator.mediaDevices.getUserMedia({ video: { deviceId: { exact: deviceId } } });
+			const newTrack = newStream.getVideoTracks()[0];
+			
+			if (newTrack && localStream) {
+				const oldTrack = localStream.getVideoTracks()[0];
+				if (oldTrack) {
+					oldTrack.stop();
+					localStream.removeTrack(oldTrack);
+				}
+				localStream.addTrack(newTrack);
+				
+				if (!isScreenSharing) {
+					conns.current.forEach(({ pc }) => {
+						const sender = pc.getSenders().find(s => s.track?.kind === 'video') || pc.getSenders().find(s => !s.track);
+						if (sender) sender.replaceTrack(newTrack);
+					});
+				}
+			}
+		} catch (e) {
+			console.error("Switch camera error:", e);
+		}
+	}
+
+	async function switchMic(deviceId: string) {
+		setSelectedMic(deviceId);
+		if (!micOn) return;
+		
+		try {
+			const newStream = await navigator.mediaDevices.getUserMedia({ audio: { deviceId: { exact: deviceId } } });
+			const newTrack = newStream.getAudioTracks()[0];
+			
+			if (newTrack && localStream) {
+				const oldTrack = localStream.getAudioTracks()[0];
+				if (oldTrack) {
+					oldTrack.stop();
+					localStream.removeTrack(oldTrack);
+				}
+				localStream.addTrack(newTrack);
+				
+				conns.current.forEach(({ pc }) => {
+					const sender = pc.getSenders().find(s => s.track?.kind === 'audio');
+					if (sender) sender.replaceTrack(newTrack);
+				});
+			}
+		} catch (e) {
+			console.error("Switch mic error:", e);
 		}
 	}
 	
@@ -329,6 +390,11 @@ export default function VideoPage({ params }: { params: { groupId: string } }) {
 			
 			setIsScreenSharing(true);
 			
+			// Update local preview
+			const oldTrack = localStream?.getVideoTracks()[0];
+			if (oldTrack) localStream?.removeTrack(oldTrack);
+			localStream?.addTrack(track);
+
 			track.onended = () => stopScreenShare();
 		} catch {
 			// user cancelled the prompt
@@ -340,17 +406,37 @@ export default function VideoPage({ params }: { params: { groupId: string } }) {
 			setIsScreenSharing(false);
 			return;
 		}
-		const camTrack = localStream.getVideoTracks()[0];
-		
-		// Swap the outgoing sender tracks back to the local webcam stream
-		conns.current.forEach(({ pc }) => {
-			const sender = pc.getSenders().find((s) => s.track && s.track.kind === 'video');
-			if (sender && camTrack) sender.replaceTrack(camTrack);
-		});
-		
-		screenTrackRef.current?.stop();
-		screenTrackRef.current = null;
-		setIsScreenSharing(false);
+
+		(async () => {
+			let camTrack: MediaStreamTrack | null = null;
+			if (camOn) {
+				try {
+					const s = await navigator.mediaDevices.getUserMedia({ video: selectedCam ? { deviceId: { exact: selectedCam } } : true });
+					camTrack = s.getVideoTracks()[0];
+				} catch (e) {
+					console.error("Failed to restore camera after screen share:", e);
+				}
+			}
+
+			// Swap back peer tracks
+			conns.current.forEach(({ pc }) => {
+				const sender = pc.getSenders().find((s) => s.track && s.track.kind === 'video') || pc.getSenders().find(s => !s.track);
+				if (sender) sender.replaceTrack(camTrack);
+			});
+
+			// Update local preview
+			const screenTrack = localStream.getVideoTracks().find(t => t.id === screenTrackRef.current?.id);
+			if (screenTrack) {
+				localStream.removeTrack(screenTrack);
+			}
+			if (camTrack) {
+				localStream.addTrack(camTrack);
+			}
+
+			screenTrackRef.current?.stop();
+			screenTrackRef.current = null;
+			setIsScreenSharing(false);
+		})();
 	}
 
 	return (
@@ -385,6 +471,7 @@ export default function VideoPage({ params }: { params: { groupId: string } }) {
 								isLocal={true} 
 								camOn={camOn} 
 								cameraError={cameraError} 
+								isScreenSharing={isScreenSharing}
 							/>
 
 							{/* Dynamic Incoming Peer Tracks */}
@@ -453,6 +540,54 @@ export default function VideoPage({ params }: { params: { groupId: string } }) {
 								</>
 							)}
 						</button>
+
+						<div className="w-[1px] h-10 bg-black/10 mx-2"></div>
+
+						{/* Settings Toggle */}
+						<div className="relative">
+							<button 
+								onClick={() => setShowSettings(!showSettings)} 
+								className={`w-16 h-16 flex items-center justify-center rounded-full font-bold transition-all duration-300 bg-white border border-black/5 hover:bg-black/5 ${showSettings ? 'rotate-90' : ''}`}
+							>
+								<Settings className="w-6 h-6 text-deepInk" />
+							</button>
+
+							{showSettings && (
+								<div className="absolute bottom-24 right-0 w-80 bg-white rounded-[2rem] shadow-max border border-black/5 p-8 flex flex-col gap-6 animate-in slide-in-from-bottom-4 duration-300">
+									<div className="flex flex-col gap-4">
+										<h4 className="text-[10px] font-black tracking-[0.3em] text-deepInk/40 uppercase">Video Input</h4>
+										<div className="flex flex-col gap-2">
+											{devices.filter(d => d.kind === 'videoinput').map(d => (
+												<button 
+													key={d.deviceId} 
+													onClick={() => switchCamera(d.deviceId)}
+													className={`flex items-center justify-between px-5 py-3 rounded-full text-[10px] font-bold tracking-wider transition-all ${selectedCam === d.deviceId || (!selectedCam && devices.filter(x => x.kind === 'videoinput')[0]?.deviceId === d.deviceId) ? 'bg-neonLime text-deepInk' : 'bg-black/5 text-deepInk/60 hover:bg-black/10'}`}
+												>
+													<span className="truncate">{d.label || `Camera ${d.deviceId.slice(0, 4)}`}</span>
+													{(selectedCam === d.deviceId) && <Check className="w-3 h-3" />}
+												</button>
+											))}
+										</div>
+									</div>
+
+									<div className="flex flex-col gap-4 pt-4 border-t border-black/5">
+										<h4 className="text-[10px] font-black tracking-[0.3em] text-deepInk/40 uppercase">Audio Input</h4>
+										<div className="flex flex-col gap-2">
+											{devices.filter(d => d.kind === 'audioinput').map(d => (
+												<button 
+													key={d.deviceId} 
+													onClick={() => switchMic(d.deviceId)}
+													className={`flex items-center justify-between px-5 py-3 rounded-full text-[10px] font-bold tracking-wider transition-all ${selectedMic === d.deviceId || (!selectedMic && devices.filter(x => x.kind === 'audioinput')[0]?.deviceId === d.deviceId) ? 'bg-neonLime text-deepInk' : 'bg-black/5 text-deepInk/60 hover:bg-black/10'}`}
+												>
+													<span className="truncate">{d.label || `Microphone ${d.deviceId.slice(0, 4)}`}</span>
+													{(selectedMic === d.deviceId) && <Check className="w-3 h-3" />}
+												</button>
+											))}
+										</div>
+									</div>
+								</div>
+							)}
+						</div>
 					</div>
 				</div>
 			</div>
